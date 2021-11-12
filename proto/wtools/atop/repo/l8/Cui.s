@@ -120,8 +120,6 @@ function commandVersion( e )
 {
   let cui = this;
 
-  cui._command_head( commandVersion, arguments );
-
   return _.npm.versionLog
   ({
     localPath : _.path.join( __dirname, '../../../../..' ),

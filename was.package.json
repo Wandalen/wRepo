@@ -36,7 +36,7 @@
   "dependencies": {
     "wTools": "",
     "wCopyable": "",
-    "wProcess": "",
+    "wprocess": "",
     "wcommandsaggregator": "",
     "wrepobasic": ""
   },
