@@ -1,6 +1,6 @@
 {
   "name": "wrepo",
-  "version": "0.3.380",
+  "version": "0.3.381",
   "description": "Utility to work with remote git repositories.",
   "author": "Kostiantyn Wandalen <wanalen@01.school>",
   "contributors": [
@@ -35,11 +35,11 @@
   },
   "dependencies": {
     "wTools": "",
-    "wCopyable": "",
+    "wrepobasic": "",
     "wprocess": "",
-    "wcommandsaggregator": "",
     "wgittools": "",
-    "wrepobasic": ""
+    "wCopyable": "",
+    "wcommandsaggregator": ""
   },
   "devDependencies": {
     "wTesting": "",
