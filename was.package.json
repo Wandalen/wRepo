@@ -38,6 +38,7 @@
     "wCopyable": "",
     "wprocess": "",
     "wcommandsaggregator": "",
+    "wgittools": "",
     "wrepobasic": ""
   },
   "devDependencies": {

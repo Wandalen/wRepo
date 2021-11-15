@@ -301,6 +301,9 @@ submodule:
   wcommandsaggregator:
     path: 'npm:///wcommandsaggregator'
     enabled: 0
+  wgittools:
+    path: 'npm:///wgittools'
+    enabled: 0
   wrepobasic:
     path: 'npm:///wrepobasic'
     enabled: 0
