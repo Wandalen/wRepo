@@ -1,12 +1,16 @@
 {
   "name": "wrepo",
   "version": "0.3.380",
-  "description": "Collection of tools to use git programmatically.",
+  "description": "Utility to work with remote git repositories.",
   "author": "Kostiantyn Wandalen <wanalen@01.school>",
+  "contributors": [
+    "Kostiantyn Wandalen <wanalen@01.school>",
+    "Dmytro Kryvoruchko <dm.vict.kr@gmail.com>"
+  ],
   "license": "MIT",
   "main": "proto/node_modules/wrepo",
   "files": [
-    "proto/wtools/amid/l3/git",
+    "proto/wtools/atop/repo",
     "out",
     "proto/node_modules",
     "proto/node_modules/Tools",
@@ -23,22 +27,26 @@
   "bugs": {
     "url": "https://github.com/Wandalen/wRepo/issues"
   },
+  "bin": {
+    "repo.singleproc": "proto/wtools/atop/repo/entry/Exec",
+    "repo.debug": "proto/wtools/atop/repo/entry/ExecDebug",
+    "repo.unrestricted": "proto/wtools/atop/repo/entry/ExecUnrestricted",
+    "repo": "proto/wtools/atop/repo/entry/ExecUnrestricted"
+  },
   "dependencies": {
-    "wTools": "gamma",
-    "wremote": "gamma",
-    "wprocess": "gamma",
-    "wintrospectorextra": "gamma",
-    "wfilesbasic": "gamma",
-    "wfilesarchive": "gamma",
-    "wCopyable": "gamma",
-    "ini": "=2.0.0",
-    "@octokit/rest": "=18.5.2"
+    "wTools": "alpha",
+    "wCopyable": "alpha",
+    "wprocess": "alpha",
+    "wcommandsaggregator": "alpha",
+    "wgittools": "alpha",
+    "wrepobasic": "alpha"
   },
   "devDependencies": {
-    "wTesting": "gamma",
+    "wTesting": "alpha",
     "eslint": "7.32.0"
   },
   "keywords": [
     "wTools"
   ]
 }
+
