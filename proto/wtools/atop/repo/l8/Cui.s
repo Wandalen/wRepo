@@ -81,6 +81,8 @@ function _commandsMake()
   {
     'help' :                    { ro : _.routineJoin( cui, cui.commandHelp ) },
     'version' :                 { ro : _.routineJoin( cui, cui.commandVersion ) },
+
+    'agree' :                   { ro : _.routineJoin( cui, cui.commandAgree ) },
   };
 
   let ca = _.CommandsAggregator
@@ -130,6 +132,53 @@ function commandVersion( e )
 var command = commandVersion.command = Object.create( null );
 command.hint = 'Get information about version.';
 command.subjectHint = false;
+
+//
+
+function commandAgree( e )
+{
+  const properties = e.propertiesMap;
+
+  _.sure( _.str.defined( properties.srcPath ), 'Expects path to source repository.' );
+  _.sure( _.str.defined( properties.withState ), 'Expects state to sync with.' );
+  _.mapSupplementNulls( properties, commandAgree.defaults );
+
+  return _.git.repositoryAgree
+  ({
+    srcPath : properties.srcPath || e.subject,
+    localPath : properties.dstPath || _.path.current(),
+    state2 : properties.withState,
+    srcBase : properties.srcBase,
+    dstBase : properties.dstBase,
+    commitMessage : properties.message,
+    mergeStrategy : properties.mergeStrategy,
+    but : properties.but,
+    only : properties.only,
+    logger : 2,
+  })
+}
+
+var command = commandAgree.command = Object.create( null );
+commandAgree.defaults =
+{
+  srcBase : '.',
+  dstBase : '.',
+  mergeStrategy : 'src',
+};
+command.hint = 'Synchronize repository with another repository.';
+command.subjectHint = 'Path to source repository.';
+command.properties =
+{
+  srcPath : 'A path to source repository.',
+  dstPath : 'A local path to destination repository. Default is current directory.',
+  withState : 'A commit, tag or branch in source repository to sync with.',
+  srcBase : 'A base directory for source repository. Filters changes in source repository in relation to this path. Default is source repository root directory.',
+  dstBase : 'A base directory for destination repository. Checks difference in relation to this path. Default is destination repository root directory.',
+  message : 'A commit message for synchronization commit. Optional.',
+  mergeStrategy : 'A strategy to resolve conflicts in merged files. \n\tStrategies : \n\t`src` - apply external repository changes, \n\t`dst` - save original repository changes, \n\t`manual` - resolve conflicts manually. \n\tDefault is `src`.',
+  but : 'A pattern or array of patterns to exclude from merge. Could be a glob.',
+  only : 'A pattern or array of patterns to include in merge. Could be a glob.',
+};
 
 // --
 // relations
@@ -181,6 +230,10 @@ let Extension =
 
   commandHelp,
   commandVersion,
+
+  // migrate
+
+  commandAgree,
 
   // relations
 
