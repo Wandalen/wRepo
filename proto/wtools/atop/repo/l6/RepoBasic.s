@@ -58,6 +58,8 @@ function init( o )
 
 function repositoryAgree( o )
 {
+  _.routine.options( repositoryAgree, o );
+
   const currentPath = _.git.path.current();
   const srcProvider  = _.repo.providerForPath( o.src );
   if( srcProvider.name === 'hd' )
@@ -95,10 +97,24 @@ function repositoryAgree( o )
   });
 }
 
+repositoryAgree.defaults =
+{
+  src : null,
+  dst : null,
+  srcDirPath : null,
+  dstDirPath : null,
+  message : null,
+  mergeStrategy : null,
+  but : null,
+  only : null,
+};
+
 //
 
 function repositoryMigrate( o )
 {
+  _.routine.options( repositoryMigrate, o );
+
   const currentPath = _.git.path.current();
   const srcProvider  = _.repo.providerForPath( o.src );
   if( srcProvider.name === 'hd' )
@@ -142,6 +158,20 @@ function repositoryMigrate( o )
     only : o.only,
   });
 }
+
+repositoryMigrate.defaults =
+{
+  src : null,
+  dst : null,
+  srcState1 : null,
+  srcState2 : null,
+  srcDirPath : null,
+  dstDirPath : null,
+  onMessage : null,
+  onDate : null,
+  but : null,
+  only : null,
+};
 
 // --
 // fields
