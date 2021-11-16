@@ -6,7 +6,7 @@
 //
 
 const _ = _global_.wTools;
-const Parent = null;
+const Parent = wRepoBasic;
 const Self = wRepoCui;
 function wRepoCui( o )
 {
@@ -138,43 +138,31 @@ command.subjectHint = false;
 
 function commandAgree( e )
 {
-  const properties = e.propertiesMap;
+  const cui = this;
+  const options = e.propertiesMap;
 
-  _.sure( _.str.defined( properties.srcPath ), 'Expects path to source repository.' );
-  _.sure( _.str.defined( properties.withState ), 'Expects state to sync with.' );
-  _.mapSupplementNulls( properties, commandAgree.defaults );
+  _.sure( _.str.defined( options.src ), 'Expects path to source repository.' );
+  _.sure( _.str.defined( options.dst ), 'Expects path to destination repository.' );
+  _.mapSupplementNulls( options, commandAgree.defaults );
 
-  return _.git.repositoryAgree
-  ({
-    srcPath : properties.srcPath || e.subject,
-    localPath : properties.dstPath || _.path.current(),
-    state2 : properties.withState,
-    srcBase : properties.srcBase,
-    dstBase : properties.dstBase,
-    commitMessage : properties.message,
-    mergeStrategy : properties.mergeStrategy,
-    but : properties.but,
-    only : properties.only,
-    logger : 2,
-  })
+  return cui.repositoryAgree( options );
 }
 
 var command = commandAgree.command = Object.create( null );
 commandAgree.defaults =
 {
-  srcBase : '.',
-  dstBase : '.',
+  srcDirPath : '.',
+  dstDirPath : '.',
   mergeStrategy : 'src',
 };
-command.hint = 'Synchronize repository with another repository.';
-command.subjectHint = 'Path to source repository.';
+command.hint = 'Synchronize repository with another repository / directory.';
+command.subjectHint = false;
 command.properties =
 {
-  srcPath : 'A path to source repository.',
-  dstPath : 'A local path to destination repository. Default is current directory.',
-  withState : 'A commit, tag or branch in source repository to sync with.',
-  srcBase : 'A base directory for source repository. Filters changes in source repository in relation to this path. Default is source repository root directory.',
-  dstBase : 'A base directory for destination repository. Checks difference in relation to this path. Default is destination repository root directory.',
+  src : 'A path to source repository. Should contains a branch / tag / version to agree with.',
+  dst : 'A local path to destination repository. Default is current directory. Should contains a branch to merge changes',
+  srcDirPath : 'A base directory for source repository. Filters changes in source repository in relation to this path. Default is source repository root directory.',
+  dstDirPath : 'A base directory for destination repository. Checks difference in relation to this path. Default is destination repository root directory.',
   message : 'A commit message for synchronization commit. Optional.',
   mergeStrategy : 'A strategy to resolve conflicts in merged files. \n\tStrategies : \n\t`src` - apply external repository changes, \n\t`dst` - save original repository changes, \n\t`manual` - resolve conflicts manually. \n\tDefault is `src`.',
   but : 'A pattern or array of patterns to exclude from merge. Could be a glob.',
@@ -308,8 +296,6 @@ _.classDeclare
   parent : Parent,
   extend : Extension,
 });
-
-_.Copyable.mixin( Self );
 
 //
 
