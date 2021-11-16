@@ -100,6 +100,61 @@ function agree( test )
 
   /* - */
 
+  begin();
+  a.ready.then( () =>
+  {
+    test.case = 'agree with remote repository, use master branch to agree with';
+    return null;
+  });
+  a.appStart( '.agree dst:./!master src:\'https://github.com/Wandalen/wModuleForTesting2!master\'' );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    var config = a.fileProvider.fileReadUnknown( a.abs( 'package.json' ) );
+    test.identical( config.name, 'wmodulefortesting2' );
+    var config = a.fileProvider.fileReadUnknown( a.abs( 'was.package.json' ) );
+    test.identical( config.name, 'wmodulefortesting2' );
+    return null;
+  });
+  a.shell( 'git log -n 1' );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    console.log( op.output );
+    test.identical( _.strCount( op.output, /Merge branch \'master\' of https.*\/wModuleForTesting2 into master/ ), 1 );
+    return null;
+  });
+
+  /* */
+
+  begin();
+  a.ready.then( () =>
+  {
+    test.case = 'agree with local repository, use commit to agree with';
+    return null;
+  });
+  a.appStart( '.agree dst:./!master src:\'https://github.com/Wandalen/wModuleForTesting2#f68a59ec46b14b1f19b1e3e660e924b9f1f674dd\'' );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    var config = a.fileProvider.fileReadUnknown( a.abs( 'package.json' ) );
+    test.identical( config.name, 'wmodulefortesting2' );
+    test.identical( config.version, '0.0.170' );
+    var config = a.fileProvider.fileReadUnknown( a.abs( 'was.package.json' ) );
+    test.identical( config.name, 'wmodulefortesting2' );
+    test.identical( config.version, '0.0.170' );
+    return null;
+  });
+  a.shell( 'git log -n 1' );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, /Merge branch \'master\' of https.*\/wModuleForTesting2.* into master/ ), 1 );
+    return null;
+  });
+
+  /* - */
+
   return a.ready;
 
   /* */
