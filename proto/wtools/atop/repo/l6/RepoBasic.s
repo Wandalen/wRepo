@@ -67,7 +67,7 @@ function repositoryAgree( o )
   const dstParsed = _.git.path.parse( o.dst );
   _.sure( dstParsed.tag !== undefined, 'Expects defined branch in path {-dst-}' );
 
-  const nativized = _.git.path.nativize( o.dst )
+  const nativized = _.git.path.nativize( o.dst );
   const tagDescriptor = _.git.tagExplain
   ({
     remotePath : o.dst,
@@ -90,6 +90,52 @@ function repositoryAgree( o )
     but : o.but,
     only : o.only,
     logger : 2,
+  });
+}
+
+//
+
+function repositoryMigrate( o )
+{
+  const currentPath = _.git.path.current();
+  o.src = _.git.path.join( currentPath, o.src );
+  o.dst = _.git.path.join( currentPath, o.dst );
+
+  const srcParsed = _.git.path.parse( o.src );
+  _.sure( srcParsed.tag !== undefined );
+  const dstParsed = _.git.path.parse( o.dst );
+  _.sure( dstParsed.tag !== undefined, 'Expects defined branch in path {-dst-}' );
+
+  const nativized = _.git.path.nativize( o.dst );
+  const tagDescriptor = _.git.tagExplain
+  ({
+    remotePath : o.dst,
+    localPath : nativized,
+    tag : dstParsed.tag,
+    remote : 0,
+    local : 1,
+  });
+  _.sure( tagDescriptor.isBranch, `Expects branch but got tag ${ dstParsed.tag }` );
+
+  let onCommitMessage = o.onMessage;
+  if( onCommitMessage )
+  onCommitMessage = require( _.path.join( _.path.current(), onCommitMessage ) );
+  let onDate = o.onMessage;
+  if( onDate )
+  onDate = require( _.path.join( _.path.current(), onDate ) );
+
+  return _.git.repositoryMigrate
+  ({
+    srcBasePath : o.src,
+    dstBasePath : nativized,
+    srcState1 : o.srcState1,
+    srcState2 : o.srcState2,
+    srcDirPath : o.srcDirPath,
+    dstDirPath : o.dstDirPath,
+    onCommitMessage,
+    onDate,
+    but : o.but,
+    only : o.only,
   });
 }
 
@@ -140,6 +186,7 @@ let Extension =
   //
 
   repositoryAgree,
+  repositoryMigrate,
 
   // relation
 
