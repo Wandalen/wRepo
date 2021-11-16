@@ -83,7 +83,7 @@ function _commandsMake()
     'version' :                 { ro : _.routineJoin( cui, cui.commandVersion ) },
 
     'agree' :                   { ro : _.routineJoin( cui, cui.commandAgree ) },
-    'migrate' :                 { ro : _.routineJoin( cui, cui.commandMigrate ) },
+    // 'migrate' :                 { ro : _.routineJoin( cui, cui.commandMigrate ) },
   };
 
   let ca = _.CommandsAggregator
