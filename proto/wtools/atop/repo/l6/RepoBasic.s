@@ -59,6 +59,8 @@ function init( o )
 function repositoryAgree( o )
 {
   const currentPath = _.git.path.current();
+  const srcProvider  = _.repo.providerForPath( o.src );
+  if( srcProvider.name === 'hd' )
   o.src = _.git.path.join( currentPath, o.src );
   o.dst = _.git.path.join( currentPath, o.dst );
 
@@ -98,6 +100,8 @@ function repositoryAgree( o )
 function repositoryMigrate( o )
 {
   const currentPath = _.git.path.current();
+  const srcProvider  = _.repo.providerForPath( o.src );
+  if( srcProvider.name === 'hd' )
   o.src = _.git.path.join( currentPath, o.src );
   o.dst = _.git.path.join( currentPath, o.dst );
 
