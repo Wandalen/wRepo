@@ -884,6 +884,226 @@ function migrateWithOptionOnMessage( test )
   }
 }
 
+//
+
+function migrateWithOptionBut( test )
+{
+  const a = test.assetFor( false );
+  const dstRepositoryRemote = 'https://github.com/Wandalen/wModuleForTesting1.git';
+  const dstCommit = '8e2aa80ca350f3c45215abafa07a4f2cd320342a';
+  const srcRepositoryRemote = 'https://github.com/Wandalen/wModuleForTesting2.git';
+  const srcState1 = 'f68a59ec46b14b1f19b1e3e660e924b9f1f674dd';
+  const srcState2 = 'd8c18d24c1d65fab1af6b8d676bba578b58bfad5';
+
+  /* - */
+
+  begin();
+  a.ready.then( () =>
+  {
+    test.case = 'no option but';
+    return null;
+  });
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+
+  a.appStart( `.migrate dst:./!master src:../repo!master srcState1:#${ srcState1 } srcState2:#${ srcState2 } onMessage:${ a.abs( '../OnMessage.js' ) }` );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    var config = a.fileProvider.fileReadUnknown( a.abs( 'package.json' ) );
+    test.identical( config.name, 'wmodulefortesting2' );
+    test.identical( config.version, '0.0.178' );
+    var config = a.fileProvider.fileReadUnknown( a.abs( 'was.package.json' ) );
+    test.identical( config.name, 'wmodulefortesting2' );
+    test.identical( config.version, '0.0.178' );
+    return null;
+  });
+  a.shell( 'git log -n 20' );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, '__sync__' ), 15 );
+    return null;
+  });
+
+  /* */
+
+  begin();
+  a.ready.then( () =>
+  {
+    test.case = 'but - string, matches file, exclude single file';
+    return null;
+  });
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+
+  a.appStart( `.migrate dst:./!master src:../repo!master srcState1:#${ srcState1 } srcState2:#${ srcState2 } onMessage:${ '../OnMessage.js' } but:'package.json'` );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    var config = a.fileProvider.fileReadUnknown( a.abs( 'package.json' ) );
+    test.identical( config.name, 'wmodulefortesting2' );
+    test.identical( config.version, '0.0.170' );
+    var config = a.fileProvider.fileReadUnknown( a.abs( 'was.package.json' ) );
+    test.identical( config.name, 'wmodulefortesting2' );
+    test.identical( config.version, '0.0.178' );
+    return null;
+  });
+  a.shell( 'git log -n 20' );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, '__sync__' ), 15 );
+    return null;
+  });
+
+  /* */
+
+  begin();
+  a.ready.then( () =>
+  {
+    test.case = 'but - string, matches no file, exclude single file';
+    return null;
+  });
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+
+  a.appStart( `.migrate dst:./!master src:../repo!master srcState1:#${ srcState1 } srcState2:#${ srcState2 } onMessage:${ '../OnMessage.js' } but:'unknown.json'` );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    var config = a.fileProvider.fileReadUnknown( a.abs( 'package.json' ) );
+    test.identical( config.name, 'wmodulefortesting2' );
+    test.identical( config.version, '0.0.178' );
+    var config = a.fileProvider.fileReadUnknown( a.abs( 'was.package.json' ) );
+    test.identical( config.name, 'wmodulefortesting2' );
+    test.identical( config.version, '0.0.178' );
+    return null;
+  });
+  a.shell( 'git log -n 20' );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, '__sync__' ), 15 );
+    return null;
+  });
+
+  /* */
+
+  begin();
+  a.ready.then( () =>
+  {
+    test.case = 'but - string with glob, matches file, exclude two files';
+    return null;
+  });
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+
+  a.appStart( `.migrate dst:./!master src:../repo!master srcState1:#${ srcState1 } srcState2:#${ srcState2 } onMessage:${ '../OnMessage.js' } but:'*package.json'` );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    var config = a.fileProvider.fileReadUnknown( a.abs( 'package.json' ) );
+    test.identical( config.name, 'wmodulefortesting2' );
+    test.identical( config.version, '0.0.170' );
+    var config = a.fileProvider.fileReadUnknown( a.abs( 'was.package.json' ) );
+    test.identical( config.name, 'wmodulefortesting2' );
+    test.identical( config.version, '0.0.170' );
+    return null;
+  });
+  a.shell( 'git log -n 20' );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, '__sync__' ), 9 );
+    return null;
+  });
+
+  /* */
+
+  begin();
+  a.ready.then( () =>
+  {
+    test.case = 'but - array of strings, matches files';
+    return null;
+  });
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+
+  a.appStart( `.migrate dst:./!master src:../repo!master srcState1:#${ srcState1 } srcState2:#${ srcState2 } onMessage:${ '../OnMessage.js' } but:'*package.json' but:'will.yml' but:'unknown.json'` );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    var config = a.fileProvider.fileReadUnknown( a.abs( 'package.json' ) );
+    test.identical( config.name, 'wmodulefortesting2' );
+    test.identical( config.version, '0.0.170' );
+    var config = a.fileProvider.fileReadUnknown( a.abs( 'was.package.json' ) );
+    test.identical( config.name, 'wmodulefortesting2' );
+    test.identical( config.version, '0.0.170' );
+    return null;
+  });
+  a.shell( 'git log -n 20' );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, '__sync__' ), 7 );
+    return null;
+  });
+
+  /* */
+
+  begin();
+  a.ready.then( () =>
+  {
+    test.case = 'but - array of strings, matches files';
+    return null;
+  });
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+
+  a.appStart( `.migrate dst:./!master src:../repo!master srcState1:#${ srcState1 } srcState2:#${ srcState2 } onMessage:${ '../OnMessage.js' } but:[*package.json, will.yml, unknown.json]` );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    var config = a.fileProvider.fileReadUnknown( a.abs( 'package.json' ) );
+    test.identical( config.name, 'wmodulefortesting2' );
+    test.identical( config.version, '0.0.170' );
+    var config = a.fileProvider.fileReadUnknown( a.abs( 'was.package.json' ) );
+    test.identical( config.name, 'wmodulefortesting2' );
+    test.identical( config.version, '0.0.170' );
+    return null;
+  });
+  a.shell( 'git log -n 20' );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, '__sync__' ), 7 );
+    return null;
+  });
+
+  /* - */
+
+  return a.ready;
+
+  /* */
+
+  function begin()
+  {
+    let code =
+`
+  function onMessage( msg )
+  {
+    return '__sync__';
+  }
+  module.exports = onMessage;
+`;
+    a.ready.then( () => { a.fileProvider.filesDelete( a.abs( '../OnMessage.js' ) ); return null });
+    a.ready.then( () => { a.fileProvider.fileWrite( a.abs( '../OnMessage.js' ), code ); return null });
+    a.ready.then( () => { a.fileProvider.filesDelete( a.abs( '.' ) ); return null });
+    a.ready.then( () => { a.fileProvider.filesDelete( a.abs( '../repo' ) ); return null });
+    a.ready.then( () => { a.fileProvider.dirMake( a.abs( '.' ) ); return null });
+    a.shell( `git clone ${ dstRepositoryRemote } ./` );
+    a.shell( `git reset --hard ${ dstCommit }` );
+    return a.shell( `git clone ${ srcRepositoryRemote } ../repo` );
+  }
+}
+
+migrateWithOptionBut.timeOut = 180000;
+
 // --
 // declare
 // --
@@ -913,6 +1133,7 @@ const Proto =
 
     migrate,
     migrateWithOptionOnMessage,
+    migrateWithOptionBut,
   },
 };
 
