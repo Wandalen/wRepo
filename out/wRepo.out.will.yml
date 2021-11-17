@@ -168,8 +168,12 @@ module:
           - ../proto/wtools/atop/repo/include/Base.s
           - ../proto/wtools/atop/repo/include/Mid.s
           - ../proto/wtools/atop/repo/include/Top.s
+          - ../proto/wtools/atop/repo/l6
+          - ../proto/wtools/atop/repo/l6/RepoBasic.s
           - ../proto/wtools/atop/repo/l8
           - ../proto/wtools/atop/repo/l8/Cui.s
+          - ../proto/wtools/atop/repo.test
+          - ../proto/wtools/atop/repo.test/Ext.test.s
     submodule:
       wTools:
         path: 'npm:///wTools'
