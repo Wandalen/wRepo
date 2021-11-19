@@ -84,6 +84,8 @@ function _commandsMake()
 
     'agree' :                   { ro : _.routineJoin( cui, cui.commandAgree ) },
     'migrate' :                 { ro : _.routineJoin( cui, cui.commandMigrate ) },
+
+    'commits dates' :           { ro : _.routineJoin( cui, cui.commandCommitsDates ) },
   };
 
   let ca = _.CommandsAggregator
@@ -206,6 +208,34 @@ command.properties =
   only : 'A pattern or array of patterns to include in merge. Could be a glob.',
 };
 
+//
+
+function commandCommitsDates( e )
+{
+  const cui = this;
+  const options = e.propertiesMap;
+
+  _.sure( _.str.defined( options.src ), 'Expects path to source repository.' );
+  _.sure( _.str.defined( options.state1 ), 'Expects start state to migrate commits.' );
+  _.sure( options.delta !== undefined, 'Expects time delta.' );
+
+  return cui.commitsDates( options );
+}
+
+var command = commandCommitsDates.command = Object.create( null );
+command.hint = 'Rewrite commits author date in local repository.';
+command.subjectHint = false;
+command.properties =
+{
+  src : 'A path to local repository. Can contains branch name.',
+  state1 : 'A start commit.',
+  state2 : 'An end commit. Optional, by default command changes commits from start commit to last commit in branch.',
+  relative : 'Define what date will be modified and applied to commit. Accepts two options : "now" - current date, "commit" - commit date. Default is "now".',
+  delta : 'Define the time delta that applied to modified date. Accepts time in milliseconds or in format "hh:mm:ss". \n\tIf option `periodic` is enabled, than the option is used to calculate start date to write commits periodically.',
+  periodic : 'Define the time period in which commits will be committed. Accepts time in milliseconds or in format "hh:mm:ss".',
+  deviation : 'Define deviation for periodically created commits. Accepts time in milliseconds or in format "hh:mm:ss".',
+};
+
 // --
 // relations
 // --
@@ -261,6 +291,10 @@ let Extension =
 
   commandAgree,
   commandMigrate,
+
+  // commits
+
+  commandCommitsDates,
 
   // relations
 

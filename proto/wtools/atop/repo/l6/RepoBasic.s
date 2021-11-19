@@ -173,6 +173,37 @@ repositoryMigrate.defaults =
   only : null,
 };
 
+//
+
+function commitsDates( o )
+{
+  _.routine.options( commitsDates, o );
+
+  const currentPath = _.git.path.current();
+  const srcProvider  = _.repo.providerForPath( o.src );
+  _.sure( srcProvider.name === 'hd' )
+
+  const localPath = _.path.join( currentPath, o.src );
+  delete o.src;
+
+  return _.git.commitsDates
+  ({
+    localPath,
+    ... o,
+  });
+}
+
+commitsDates.defaults =
+{
+  src : null,
+  state1 : null,
+  state2 : null,
+  relative : 'now',
+  delta : null,
+  periodic : 0,
+  deviation : 0,
+};
+
 // --
 // fields
 // --
@@ -221,6 +252,10 @@ let Extension =
 
   repositoryAgree,
   repositoryMigrate,
+
+  //
+
+  commitsDates,
 
   // relation
 
