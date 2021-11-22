@@ -818,6 +818,219 @@ function agreeWithOptionSrcDirPath( test )
 
 //
 
+function agreeWithOptionDstDirPath( test )
+{
+  const a = test.assetFor( false );
+  const dstRepositoryRemote = 'https://github.com/Wandalen/wModuleForTesting1.git';
+  const dstCommit = '8e2aa80ca350f3c45215abafa07a4f2cd320342a';
+  const srcRepositoryRemote = 'https://github.com/Wandalen/wModuleForTesting2.git';
+  const srcState = 'f68a59ec46b14b1f19b1e3e660e924b9f1f674dd';
+
+  /* - */
+
+  let filesBefore;
+  begin().then( () =>
+  {
+    test.case = 'dstDirPath - current dir';
+    filesBefore = a.find( a.abs( './' ) );
+    return null;
+  });
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } dstDirPath:'.' message:__sync__` );
+  a.shell( 'git diff --name-only HEAD~..HEAD' );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    var files = op.output.trim().split( '\n' );
+    test.identical( files.length, 14 );
+    test.identical( _.path.common( files ), '.' );
+
+    var config = a.fileProvider.fileReadUnknown( a.abs( 'package.json' ) );
+    test.identical( config.name, 'wmodulefortesting2' );
+    test.identical( config.version, '0.0.170' );
+    var config = a.fileProvider.fileReadUnknown( a.abs( 'was.package.json' ) );
+    test.identical( config.name, 'wmodulefortesting2' );
+    test.identical( config.version, '0.0.170' );
+
+    var filesAfter = a.find( a.abs( './' ) );
+    test.notIdentical( filesBefore, filesAfter );
+    return null;
+  });
+
+  /* */
+
+  begin().then( () =>
+  {
+    test.case = 'dstDirPath - nested existed dir';
+    filesBefore = a.find( a.abs( './' ) );
+    return null;
+  });
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } dstDirPath:'proto' message:__sync__` );
+  a.shell( 'git diff --name-only HEAD~..HEAD' );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    var files = op.output.trim().split( '\n' );
+    test.identical( files.length, 19 );
+    test.identical( _.path.common( files ), 'proto/' );
+
+    var filesAfter = a.find( a.abs( './' ) );
+    test.notIdentical( filesBefore, filesAfter );
+    return null;
+  });
+
+  /* */
+
+  begin().then( () =>
+  {
+    test.case = 'dstDirPath - nested not existed dir';
+    filesBefore = a.find( a.abs( './' ) );
+    return null;
+  });
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } dstDirPath:'dev' message:__sync__` );
+  a.shell( 'git diff --name-only HEAD~..HEAD' );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    var files = op.output.trim().split( '\n' );
+    test.identical( files.length, 19 );
+    test.identical( _.path.common( files ), 'dev/' );
+
+    var filesAfter = a.find( a.abs( './' ) );
+    test.notIdentical( filesBefore, filesAfter );
+    return null;
+  });
+
+  /* - */
+
+  begin().then( () =>
+  {
+    test.case = 'dstDirPath - nested existed dir, with srcDirPath';
+    filesBefore = a.find( a.abs( './' ) );
+    return null;
+  });
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } dstDirPath:'proto' srcDirPath:'proto' message:__sync__` );
+  a.shell( 'git diff --name-only HEAD~..HEAD' );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    var files = op.output.trim().split( '\n' );
+    var exp =
+    [
+      'proto/proto/node_modules/wmodulefortesting2',
+      'proto/proto/wtools/testing/Common.s',
+      'proto/proto/wtools/testing/l2/testing2/ModuleForTesting2.s',
+    ];
+    test.identical( files, exp );
+    test.identical( _.path.common( files ), 'proto/proto/' );
+
+    var filesAfter = a.find( a.abs( './' ) );
+    test.notIdentical( filesBefore, filesAfter );
+    return null;
+  });
+
+  /* */
+
+  begin().then( () =>
+  {
+    test.case = 'dstDirPath - nested existed dir, with only';
+    filesBefore = a.find( a.abs( './' ) );
+    return null;
+  });
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } dstDirPath:'proto' only:'proto/**' message:__sync__` );
+  a.shell( 'git diff --name-only HEAD~..HEAD' );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    var files = op.output.trim().split( '\n' );
+    var exp =
+    [
+      'proto/proto/node_modules/wmodulefortesting2',
+      'proto/proto/wtools/testing/Common.s',
+      'proto/proto/wtools/testing/l2/testing2/ModuleForTesting2.s',
+    ];
+    test.identical( files, exp );
+    test.identical( _.path.common( files ), 'proto/proto/' );
+
+    var filesAfter = a.find( a.abs( './' ) );
+    test.notIdentical( filesBefore, filesAfter );
+    return null;
+  });
+
+  /* */
+
+  begin().then( () =>
+  {
+    test.case = 'dstDirPath - nested not existed dir, with srcDirPath';
+    filesBefore = a.find( a.abs( './' ) );
+    return null;
+  });
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } dstDirPath:'dev' srcDirPath:'proto' message:__sync__` );
+  a.shell( 'git diff --name-only HEAD~..HEAD' );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    var files = op.output.trim().split( '\n' );
+    var exp =
+    [
+      'dev/proto/node_modules/wmodulefortesting2',
+      'dev/proto/wtools/testing/Common.s',
+      'dev/proto/wtools/testing/l2/testing2/ModuleForTesting2.s',
+    ];
+    test.identical( files, exp );
+    test.identical( _.path.common( files ), 'dev/proto/' );
+
+    var filesAfter = a.find( a.abs( './' ) );
+    test.notIdentical( filesBefore, filesAfter );
+    return null;
+  });
+
+  /* */
+
+  begin().then( () =>
+  {
+    test.case = 'dstDirPath - nested not existed dir, with only';
+    filesBefore = a.find( a.abs( './' ) );
+    return null;
+  });
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } dstDirPath:'dev' only:'proto/**' message:__sync__` );
+  a.shell( 'git diff --name-only HEAD~..HEAD' );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    var files = op.output.trim().split( '\n' );
+    var exp =
+    [
+      'dev/proto/node_modules/wmodulefortesting2',
+      'dev/proto/wtools/testing/Common.s',
+      'dev/proto/wtools/testing/l2/testing2/ModuleForTesting2.s',
+    ];
+    test.identical( files, exp );
+    test.identical( _.path.common( files ), 'dev/proto/' );
+
+    var filesAfter = a.find( a.abs( './' ) );
+    test.notIdentical( filesBefore, filesAfter );
+    return null;
+  });
+
+  /* - */
+
+  return a.ready;
+
+  /* */
+
+  function begin()
+  {
+    a.ready.then( () => { a.fileProvider.filesDelete( a.abs( '.' ) ); return null });
+    a.ready.then( () => { a.fileProvider.filesDelete( a.abs( '../repo' ) ); return null });
+    a.ready.then( () => { a.fileProvider.dirMake( a.abs( '.' ) ); return null });
+    a.shell( `git clone ${ dstRepositoryRemote } ./` );
+    a.shell( `git reset --hard ${ dstCommit }` );
+    return a.shell( `git clone ${ srcRepositoryRemote } ../repo` );
+  }
+}
+
+//
+
 function migrate( test )
 {
   const a = test.assetFor( false );
@@ -2449,6 +2662,7 @@ const Proto =
     agreeWithOptionBut,
     agreeWithOptionOnly,
     agreeWithOptionSrcDirPath,
+    agreeWithOptionDstDirPath,
 
     migrate,
     migrateWithOptionOnMessage,
