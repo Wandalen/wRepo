@@ -202,10 +202,14 @@ command.properties =
   srcState2 : 'An end commit. Optional, by default command reflects commit from start commit to last commit in branch.',
   srcDirPath : 'A base directory for source repository. Filters changes in source repository in relation to this path. Default is source repository root directory.',
   dstDirPath : 'A base directory for destination repository. Checks difference in relation to this path. Default is destination repository root directory.',
-  onMessage : 'A path to script that produce commit message. An original commit message will be passed to script. By default, command does not change commit message.',
-  onDate : 'A path to script that produce commit date. An original string date will be passed to script. By default, command does not change commit date.',
   but : 'A pattern or array of patterns to exclude from merge. Could be a glob.',
   only : 'A pattern or array of patterns to include in merge. Could be a glob.',
+  onMessage : 'A path to script that produce commit message. An original commit message will be passed to script. By default, command does not change commit message.',
+  onDate : 'An option for modifying commit dates. Accepts values : `construct` and path to script.\n\t`construct` - callback will be constructed from options `relative`, `delta`, `periodic` and `deviation`. \n\tOtherwise, utility uses script in option. An original string date will be passed to script.\n\tBy default, command does not change commit date.',
+  relative : 'An option that define what date is used to apply delta. Option accepts values `now` and `commit`.\n\t`now` - time delta applies to current date.\n\t`commit` - time delta applies to commit author date.\n\tDefault is `now`.',
+  delta : 'An option that define time delta that will be added to commit offset time. Accepts number in miliseconds and format "hh:mm:ss".',
+  periodic : 'If option is defined, the commits will be written with defined period, start date is a sum of relative time and delta. Accepts number in miliseconds and format "hh:mm:ss".',
+  deviation : 'Option works with option `periodic`, defines deviation of commit date. Commits will be written with random date in defined date range. Accepts number in miliseconds and format "hh:mm:ss".',
 };
 
 //
