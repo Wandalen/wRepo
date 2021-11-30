@@ -3,15 +3,15 @@ root:
   - wRepo.out
 consistency:
   ../will.yml: &ref_0
-    hash: 541e86758ad18de27c663c7d9f5e975b
-    size: 6566
+    hash: 62e2b3b69c30ec32dc0c690e499649df
+    size: 6574
 module:
   wRepo.out:
     about:
       name: wRepo
       org: noorg
       description: Utility to work with remote git repositories.
-      enabled: 0
+      enabled: 1
       version: 0.4.0
       license: MIT
       npm.name: wrepo
@@ -803,7 +803,7 @@ module:
       name: wRepo
       org: noorg
       description: Utility to work with remote git repositories.
-      enabled: 0
+      enabled: 1
       version: 0.4.0
       license: MIT
       npm.name: wrepo
@@ -1481,5 +1481,5 @@ module:
           - 'build::npm'
     consistency:
       ../will.yml:
-        hash: 541e86758ad18de27c663c7d9f5e975b
-        size: 6566
+        hash: 62e2b3b69c30ec32dc0c690e499649df
+        size: 6574
