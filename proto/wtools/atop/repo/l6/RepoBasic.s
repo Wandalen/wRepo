@@ -140,9 +140,20 @@ function repositoryMigrate( o )
   let onCommitMessage = o.onMessage;
   if( onCommitMessage )
   onCommitMessage = require( _.path.join( _.path.current(), onCommitMessage ) );
+
   let onDate = o.onDate;
-  if( onDate )
-  onDate = require( _.path.join( _.path.current(), onDate ) );
+  if( o.onDate === 'construct' )
+  {
+    onDate = Object.create( null );
+    onDate.relative = o.relative;
+    onDate.delta = o.delta;
+    onDate.periodic = o.periodic;
+    onDate.deviation = o.deviation;
+  }
+  else
+  {
+    onDate = require( _.path.join( _.path.current(), onDate ) );
+  }
 
   return _.git.repositoryMigrate
   ({
@@ -167,10 +178,15 @@ repositoryMigrate.defaults =
   srcState2 : null,
   srcDirPath : null,
   dstDirPath : null,
-  onMessage : null,
-  onDate : null,
   but : null,
   only : null,
+  onMessage : null,
+
+  onDate : 'construct',
+  relative : 'now',
+  delta : 0,
+  periodic : 0,
+  deviation : 0,
 };
 
 //
