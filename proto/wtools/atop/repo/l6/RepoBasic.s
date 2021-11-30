@@ -140,9 +140,20 @@ function repositoryMigrate( o )
   let onCommitMessage = o.onMessage;
   if( onCommitMessage )
   onCommitMessage = require( _.path.join( _.path.current(), onCommitMessage ) );
+
   let onDate = o.onDate;
-  if( onDate )
-  onDate = require( _.path.join( _.path.current(), onDate ) );
+  if( o.onDate === 'construct' )
+  {
+    onDate = Object.create( null );
+    onDate.relative = o.relative;
+    onDate.delta = o.delta;
+    onDate.periodic = o.periodic;
+    onDate.deviation = o.deviation;
+  }
+  else
+  {
+    onDate = require( _.path.join( _.path.current(), onDate ) );
+  }
 
   return _.git.repositoryMigrate
   ({
@@ -167,10 +178,46 @@ repositoryMigrate.defaults =
   srcState2 : null,
   srcDirPath : null,
   dstDirPath : null,
-  onMessage : null,
-  onDate : null,
   but : null,
   only : null,
+  onMessage : null,
+
+  onDate : 'construct',
+  relative : 'now',
+  delta : 0,
+  periodic : 0,
+  deviation : 0,
+};
+
+//
+
+function commitsDates( o )
+{
+  _.routine.options( commitsDates, o );
+
+  const currentPath = _.git.path.current();
+  const srcProvider  = _.repo.providerForPath( o.src );
+  _.sure( srcProvider.name === 'hd' )
+
+  const localPath = _.path.join( currentPath, o.src );
+  delete o.src;
+
+  return _.git.commitsDates
+  ({
+    localPath,
+    ... o,
+  });
+}
+
+commitsDates.defaults =
+{
+  src : null,
+  state1 : null,
+  state2 : null,
+  relative : 'now',
+  delta : null,
+  periodic : 0,
+  deviation : 0,
 };
 
 // --
@@ -221,6 +268,10 @@ let Extension =
 
   repositoryAgree,
   repositoryMigrate,
+
+  //
+
+  commitsDates,
 
   // relation
 

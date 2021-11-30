@@ -2,7 +2,7 @@ about:
   name: wRepo
   description: Utility to work with remote git repositories.
   version: 0.4.0
-  enabled: 0
+  enabled: 1
   license: MIT
   npm.name: wrepo
   author: Kostiantyn Wandalen <wandalen@obox.systems>
