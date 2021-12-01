@@ -65,35 +65,43 @@ function repositoryAgree( o )
   if( srcProvider.name === 'hd' )
   o.src = _.git.path.join( currentPath, o.src );
   o.dst = _.git.path.join( currentPath, o.dst );
+  const nativized = _.git.path.nativize( o.dst );
+
+  if( !_.git.isRepository({ localPath : _.git.path.nativize( o.dst ) }) )
+  throw _.error.brief( 'Destination path should be a repository. Please, input valid destination path.' )
 
   const srcParsed = _.git.path.parse( o.src );
   _.sure( srcParsed.tag !== undefined || srcParsed.hash !== undefined );
-  const dstParsed = _.git.path.parse( o.dst );
-  _.sure( dstParsed.tag !== undefined, 'Expects defined branch in path {-dst-}' );
+  if
+  (
+    srcProvider.name === 'hd'
+    && _.git.isRepository({ localPath : _.git.path.nativize( o.src ) })
+    && srcParsed.tag === 'master'
+    && !_.str.has( o.src, _.git.path.tagToken )
+  )
+  srcParsed.tag = _.git.tagLocalRetrive({ localPath : o.src });
 
-  const nativized = _.git.path.nativize( o.dst );
-  const tagDescriptor = _.git.tagExplain
-  ({
-    remotePath : o.dst,
-    localPath : nativized,
-    tag : dstParsed.tag,
-    remote : 0,
-    local : 1,
+  const ready = _.take( null ).then( () =>
+  {
+    return _.git.repositoryAgree
+    ({
+      srcBasePath : o.src,
+      dstBasePath : nativized,
+      srcState : srcParsed.tag ? `!${ srcParsed.tag }` : `#${ srcParsed.hash }`,
+      srcDirPath : o.srcDirPath,
+      dstDirPath : o.dstDirPath,
+      commitMessage : o.message,
+      mergeStrategy : o.mergeStrategy,
+      but : o.but,
+      only : o.only,
+      logger : 2,
+    });
   });
-  _.sure( tagDescriptor.isBranch, `Expects branch but got tag ${ dstParsed.tag }` );
-
-  return _.git.repositoryAgree
-  ({
-    srcBasePath : o.src,
-    dstBasePath : nativized,
-    srcState : srcParsed.tag ? `!${ srcParsed.tag }` : `#${ srcParsed.hash }`,
-    srcDirPath : o.srcDirPath,
-    dstDirPath : o.dstDirPath,
-    commitMessage : o.message,
-    mergeStrategy : o.mergeStrategy,
-    but : o.but,
-    only : o.only,
-    logger : 2,
+  return ready.finally( ( err, arg ) =>
+  {
+    if( err )
+    throw _.error.brief( err );
+    return arg;
   });
 }
 
