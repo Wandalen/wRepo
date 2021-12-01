@@ -2701,7 +2701,7 @@ function commitsDates( test )
     test.case = 'relative - commit, change no date';
     return null;
   });
-  a.appStart( `.commits.dates src:${ a.abs( '.' ) } state1:'#af36e28bc91b6f18e4babc810bbf5bc758ccf19f' relative:commit delta:0` );
+  a.appStart( `.commits.dates src:'.' state1:'#af36e28bc91b6f18e4babc810bbf5bc758ccf19f' relative:commit delta:0` );
   a.ready.then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
@@ -2728,7 +2728,7 @@ function commitsDates( test )
   });
   a.appStart
   (
-    `.commits.dates src:${ a.abs( '.' ) } state1:'#af36e28bc91b6f18e4babc810bbf5bc758ccf19f' `
+    `.commits.dates src:'.' state1:'#af36e28bc91b6f18e4babc810bbf5bc758ccf19f' `
     + `state2:'#af815d4eaaf1df0505da1e1b2e526a7d04cdce7e' relative:commit delta:0`
   );
   a.ready.then( ( op ) =>
@@ -3438,7 +3438,7 @@ function commitsDatesWithOptionPeriodic( test )
     test.identical( op[ 0 ].message, originalHistory[ 0 ].message );
     test.identical( op[ 0 ].author, originalHistory[ 0 ].author );
     test.ge( Date.parse( op[ 11 ].date ) - _.time.now(), 3500000 );
-    test.le( Date.parse( op[ 11 ].date ) - _.time.now(), 3600000 );
+    test.le( Date.parse( op[ 11 ].date ) - _.time.now(), 7200000 );
 
     test.identical( Date.parse( op[ 11 ].date ) - Date.parse( op[ 12 ].date ), 3600000 );
     test.identical( Date.parse( op[ 10 ].date ) - Date.parse( op[ 11 ].date ), 3600000 );
