@@ -121,7 +121,6 @@ function agree( test )
   a.ready.then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
-    console.log( op.output );
     test.identical( _.strCount( op.output, /Merge branch \'master\' of https.*\/wModuleForTesting2.* into master/ ), 1 );
     return null;
   });
@@ -168,6 +167,136 @@ function agree( test )
     a.shell( `git clone ${ dstRepositoryRemote } ./` );
     a.shell( `git reset --hard ${ dstCommit }` );
     return a.shell( `git clone ${ srcRepositoryRemote } ../repo` );
+  }
+}
+
+//
+
+function agreeRunWithWrongDst( test )
+{
+  const a = test.assetFor( false );
+  const dstRepositoryRemote = 'https://github.com/Wandalen/wModuleForTesting1.git';
+  const dstCommit = '8e2aa80ca350f3c45215abafa07a4f2cd320342a';
+  const srcRepositoryRemote = 'https://github.com/Wandalen/wModuleForTesting2.git';
+  const srcCommit = '9feb6724d9dc797a1f816dd7ead5f14d45aae8f4';
+
+  /* - */
+
+  begin().then( () =>
+  {
+    test.case = 'run from different directory';
+    return null;
+  });
+  a.appStartNonThrowing({ currentPath : a.abs( '..' ), execPath : '.agree dst:./!master src:../repo!master' });
+  a.ready.then( ( op ) =>
+  {
+    test.notIdentical( op.exitCode, 0 );
+    var exp = 'Destination path should be a repository. Please, input valid destination path.';
+    test.identical( _.strCount( op.output, exp ), 1 );
+    return null;
+  });
+  a.shell( 'git log -n 1' );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, /Merge branch \'master\' of .*\/repo into master/ ), 0 );
+    return null;
+  });
+
+  /* */
+
+  begin().then( () =>
+  {
+    test.case = 'pass not valid path';
+    return null;
+  });
+  a.appStartNonThrowing( '.agree dst:../!master src:../repo!master' );
+  a.ready.then( ( op ) =>
+  {
+    test.notIdentical( op.exitCode, 0 );
+    var exp = 'Destination path should be a repository. Please, input valid destination path.';
+    test.identical( _.strCount( op.output, exp ), 1 );
+    return null;
+  });
+  a.shell( 'git log -n 1' );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, /Merge branch \'master\' of .*\/repo into master/ ), 0 );
+    return null;
+  });
+
+  /* - */
+
+  return a.ready;
+
+  /* */
+
+  function begin()
+  {
+    a.ready.then( () => { a.fileProvider.filesDelete( a.abs( '.' ) ); return null });
+    a.ready.then( () => { a.fileProvider.filesDelete( a.abs( '../repo' ) ); return null });
+    a.ready.then( () => { a.fileProvider.dirMake( a.abs( '.' ) ); return null });
+    a.shell( `git clone ${ dstRepositoryRemote } ./` );
+    a.shell( `git reset --hard ${ dstCommit }` );
+    a.shell( `git clone ${ srcRepositoryRemote } ../repo` );
+    return a.shell({ currentPath : a.abs( '../repo' ), execPath : `git reset --hard ${ srcCommit }` });
+  }
+}
+
+//
+
+function agreeWithNotARepository( test )
+{
+  const a = test.assetFor( false );
+  const dstRepositoryRemote = 'https://github.com/Wandalen/wModuleForTesting1.git';
+  const dstCommit = '8e2aa80ca350f3c45215abafa07a4f2cd320342a';
+  const srcRepositoryRemote = 'https://github.com/Wandalen/wModuleForTesting2.git';
+  const srcCommit = '9feb6724d9dc797a1f816dd7ead5f14d45aae8f4';
+
+  /* - */
+
+  begin().then( () =>
+  {
+    test.case = 'agree directory with same files';
+    return null;
+  });
+  a.appStart( `.agree dst:'./!master' src:'../repo'` );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    var config = a.fileProvider.fileReadUnknown( a.abs( 'package.json' ) );
+    test.identical( config.name, 'wmodulefortesting2' );
+    test.identical( config.version, '0.0.181' );
+    var config = a.fileProvider.fileReadUnknown( a.abs( 'was.package.json' ) );
+    test.identical( config.name, 'wmodulefortesting2' );
+    test.identical( config.version, '0.0.181' );
+    return null;
+  });
+  a.shell( 'git log -n 1' );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, /Merge branch \'master\' of .*\/repo into master/ ), 1 );
+    return null;
+  });
+
+  /* - */
+
+  return a.ready;
+
+  /* */
+
+  function begin()
+  {
+    a.ready.then( () => { a.fileProvider.filesDelete( a.abs( '.' ) ); return null });
+    a.ready.then( () => { a.fileProvider.filesDelete( a.abs( '../repo' ) ); return null });
+    a.ready.then( () => { a.fileProvider.dirMake( a.abs( '.' ) ); return null });
+    a.shell( `git clone ${ dstRepositoryRemote } ./` );
+    a.shell( `git reset --hard ${ dstCommit }` );
+    a.shell( `git clone ${ srcRepositoryRemote } ../repo` );
+    a.shell({ currentPath : a.abs( '../repo' ), execPath : `git reset --hard ${ srcCommit }` });
+    return a.ready.then( () => { a.fileProvider.filesDelete( a.abs( '../repo/.git' ) ); return null });
   }
 }
 
@@ -3480,6 +3609,8 @@ const Proto =
   tests :
   {
     agree,
+    agreeRunWithWrongDst,
+    agreeWithNotARepository,
     agreeWithOptionMessage,
     agreeWithOptionBut,
     agreeWithOptionOnly,
