@@ -211,7 +211,7 @@ function commitsDates( o )
 {
   _.routine.options( commitsDates, o );
 
-  const currentPath = _.git.path.current();
+  const currentPath = _.path.current();
   const srcProvider  = _.repo.providerForPath( o.src );
   _.sure( srcProvider.name === 'hd' )
 
