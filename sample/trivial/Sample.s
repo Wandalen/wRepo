@@ -1,9 +1,9 @@
-if( typeof 'module' !== undefined )
-require( 'wrepo' );
 
-let _ = wTools;
+const _ = require( 'wrepo' );
 
-let localPath = _.path.join( __dirname, '..' );
-var isRepository =  _.git.isRepository({ localPath });
+/* */
 
-console.log( `Current directory ${ localPath } is a Git repository : ${ isRepository }` );
+const utility = _.repo.Cui.Self();
+const commandsAggregator = utility._commandsMake();
+commandsAggregator.programPerform({ program : '.help' });
+
