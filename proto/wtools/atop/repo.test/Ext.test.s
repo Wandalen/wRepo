@@ -1158,6 +1158,8 @@ function agreeWithOptionDstDirPath( test )
   }
 }
 
+agreeWithOptionDstDirPath.timeOut = 180000;
+
 //
 
 function migrate( test )
