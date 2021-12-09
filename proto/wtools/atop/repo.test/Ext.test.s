@@ -1417,6 +1417,8 @@ function migrateWithOptionOnDateAsMap( test )
   const srcRepositoryRemote = 'https://github.com/Wandalen/wModuleForTesting2.git';
   const srcState1 = 'f68a59ec46b14b1f19b1e3e660e924b9f1f674dd';
   const srcState2 = 'd8c18d24c1d65fab1af6b8d676bba578b58bfad5';
+  const start = Date.parse( '2021-08-11 14:09:46 +0300' );
+  const delta = start - _.time.now() - 3600000;
 
   /* */
 
@@ -1431,6 +1433,7 @@ function migrateWithOptionOnDateAsMap( test )
     return null;
   });
   a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+  a.appStart( `.commits.dates src:'.' state1:'#HEAD' relative:commit delta:${ delta }` );
 
   a.appStart
   (
@@ -1457,6 +1460,8 @@ function migrateWithOptionOnDateAsMap( test )
     test.identical( op[ 0 ].message, originalHistory[ 0 ].message );
     test.identical( Date.parse( op[ 10 ].date ) - Date.parse( originalHistory[ 12 ].date ), 3600000 );
     test.identical( Date.parse( op[ 0 ].date ) - Date.parse( originalHistory[ 0 ].date ), 3600000 );
+    for( let i = 0 ; i < op.length ; i++ )
+    test.identical( op[ i ].date, op[ i ].commiterDate );
     return null;
   });
 
@@ -1468,6 +1473,7 @@ function migrateWithOptionOnDateAsMap( test )
     return null;
   });
   a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+  a.appStart( `.commits.dates src:'.' state1:'#HEAD' relative:commit delta:${ delta }` );
 
   a.appStart
   (
@@ -1496,6 +1502,8 @@ function migrateWithOptionOnDateAsMap( test )
     test.le( Date.parse( op[ 12 ].date ) - Date.now(), 3600000 );
     test.ge( Date.parse( op[ 0 ].date ) - Date.now(), 3500000 );
     test.le( Date.parse( op[ 0 ].date ) - Date.now(), 3600000 );
+    for( let i = 0 ; i < op.length ; i++ )
+    test.identical( op[ i ].date, op[ i ].commiterDate );
     return null;
   });
 
@@ -1507,6 +1515,7 @@ function migrateWithOptionOnDateAsMap( test )
     return null;
   });
   a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+  a.appStart( `.commits.dates src:'.' state1:'#HEAD' relative:commit delta:${ delta - 3600000 }` );
 
   a.appStart
   (
@@ -1533,6 +1542,8 @@ function migrateWithOptionOnDateAsMap( test )
     test.identical( op[ 0 ].message, originalHistory[ 0 ].message );
     test.identical( Date.parse( op[ 10 ].date ) - Date.parse( originalHistory[ 12 ].date ), -3600000 );
     test.identical( Date.parse( op[ 0 ].date ) - Date.parse( originalHistory[ 0 ].date ), -3600000 );
+    for( let i = 0 ; i < op.length ; i++ )
+    test.identical( op[ i ].date, op[ i ].commiterDate );
     return null;
   });
 
@@ -1544,6 +1555,7 @@ function migrateWithOptionOnDateAsMap( test )
     return null;
   });
   a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+  a.appStart( `.commits.dates src:'.' state1:'#HEAD' relative:commit delta:${ delta }` );
 
   a.appStart
   (
@@ -1572,6 +1584,8 @@ function migrateWithOptionOnDateAsMap( test )
     test.le( Date.now() - Date.parse( op[ 12 ].date ), 3700000 );
     test.ge( Date.now() - Date.parse( op[ 0 ].date ), 3500000 );
     test.le( Date.now() - Date.parse( op[ 0 ].date ), 3700000 );
+    for( let i = 0 ; i < op.length ; i++ )
+    test.identical( op[ i ].date, op[ i ].commiterDate );
     return null;
   });
 
@@ -1583,6 +1597,7 @@ function migrateWithOptionOnDateAsMap( test )
     return null;
   });
   a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+  a.appStart( `.commits.dates src:'.' state1:'#HEAD' relative:commit delta:${ delta }` );
 
   a.appStart
   (
@@ -1608,9 +1623,11 @@ function migrateWithOptionOnDateAsMap( test )
     test.notIdentical( op[ 0 ], originalHistory[ 0 ] );
     test.identical( op[ 0 ].message, originalHistory[ 0 ].message );
 
-    test.identical( Date.parse( op[ 11 ].date ) - Date.parse( op[ 12 ].date ), 3600000 );
-    test.identical( Date.parse( op[ 10 ].date ) - Date.parse( op[ 11 ].date ), 3600000 );
-    test.identical( Date.parse( op[ 0 ].date ) - Date.parse( op[ 1 ].date ), 3600000 );
+    test.identical( Date.parse( op[ 13 ].date ) - Date.parse( originalHistory[ 15 ].date ), 2 * 3600000 + 3600000 );
+    test.identical( Date.parse( op[ 11 ].date ) - Date.parse( originalHistory[ 13 ].date ), 4 * 3600000 + 3600000 );
+    test.identical( Date.parse( op[ 0 ].date ) - Date.parse( originalHistory[ 0 ].date ), 15 * 3600000 + 3600000 );
+    for( let i = 0 ; i < op.length ; i++ )
+    test.identical( op[ i ].date, op[ i ].commiterDate );
     return null;
   });
 
@@ -1622,6 +1639,7 @@ function migrateWithOptionOnDateAsMap( test )
     return null;
   });
   a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+  a.appStart( `.commits.dates src:'.' state1:'#HEAD' relative:commit delta:${ delta }` );
 
   a.appStart
   (
@@ -1647,12 +1665,14 @@ function migrateWithOptionOnDateAsMap( test )
     test.notIdentical( op[ 0 ], originalHistory[ 0 ] );
     test.identical( op[ 0 ].message, originalHistory[ 0 ].message );
 
-    test.ge( Date.parse( op[ 11 ].date ) - Date.parse( op[ 12 ].date ), 2500000 );
-    test.le( Date.parse( op[ 11 ].date ) - Date.parse( op[ 12 ].date ), 4500000 );
-    test.ge( Date.parse( op[ 10 ].date ) - Date.parse( op[ 11 ].date ), 2500000 );
-    test.le( Date.parse( op[ 10 ].date ) - Date.parse( op[ 11 ].date ), 4500000 );
-    test.ge( Date.parse( op[ 0 ].date ) - Date.parse( op[ 1 ].date ), 2500000 );
-    test.le( Date.parse( op[ 0 ].date ) - Date.parse( op[ 1 ].date ), 4500000 );
+    test.ge( Date.parse( op[ 13 ].date ) - Date.parse( originalHistory[ 15 ].date ), 2 * 3600000 - 12000000 );
+    test.le( Date.parse( op[ 13 ].date ) - Date.parse( originalHistory[ 15 ].date ), 2 * 3600000 + 12000000 );
+    test.ge( Date.parse( op[ 11 ].date ) - Date.parse( originalHistory[ 13 ].date ), 4 * 3600000 - 12000000 );
+    test.le( Date.parse( op[ 11 ].date ) - Date.parse( originalHistory[ 13 ].date ), 4 * 3600000 + 12000000 );
+    test.ge( Date.parse( op[ 0 ].date ) - Date.parse( originalHistory[ 0 ].date ), 15 * 3600000 - 12000000 );
+    test.le( Date.parse( op[ 0 ].date ) - Date.parse( originalHistory[ 0 ].date ), 15 * 3600000 + 12000000 );
+    for( let i = 0 ; i < op.length ; i++ )
+    test.identical( op[ i ].date, op[ i ].commiterDate );
     return null;
   });
 
@@ -3482,9 +3502,9 @@ function commitsDatesWithOptionPeriodic( test )
     test.identical( op[ 0 ].message, originalHistory[ 0 ].message );
     test.identical( op[ 0 ].author, originalHistory[ 0 ].author );
 
-    test.identical( Date.parse( op[ 11 ].date ) - Date.parse( op[ 12 ].date ), 3600000 );
-    test.identical( Date.parse( op[ 10 ].date ) - Date.parse( op[ 11 ].date ), 3600000 );
-    test.identical( Date.parse( op[ 0 ].date ) - Date.parse( op[ 1 ].date ), 3600000 );
+    test.identical( Date.parse( op[ 11 ].date ) - Date.parse( originalHistory[ 11 ].date ), 2 * 3600000 );
+    test.identical( Date.parse( op[ 10 ].date ) - Date.parse( originalHistory[ 10 ].date ), 3 * 3600000 );
+    test.identical( Date.parse( op[ 0 ].date ) - Date.parse( originalHistory[ 0 ].date ), 13 * 3600000 );
     return null;
   });
 
