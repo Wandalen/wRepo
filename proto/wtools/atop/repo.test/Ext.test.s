@@ -121,7 +121,6 @@ function agree( test )
   a.ready.then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
-    console.log( op.output );
     test.identical( _.strCount( op.output, /Merge branch \'master\' of https.*\/wModuleForTesting2.* into master/ ), 1 );
     return null;
   });
@@ -168,6 +167,136 @@ function agree( test )
     a.shell( `git clone ${ dstRepositoryRemote } ./` );
     a.shell( `git reset --hard ${ dstCommit }` );
     return a.shell( `git clone ${ srcRepositoryRemote } ../repo` );
+  }
+}
+
+//
+
+function agreeRunWithWrongDst( test )
+{
+  const a = test.assetFor( false );
+  const dstRepositoryRemote = 'https://github.com/Wandalen/wModuleForTesting1.git';
+  const dstCommit = '8e2aa80ca350f3c45215abafa07a4f2cd320342a';
+  const srcRepositoryRemote = 'https://github.com/Wandalen/wModuleForTesting2.git';
+  const srcCommit = '9feb6724d9dc797a1f816dd7ead5f14d45aae8f4';
+
+  /* - */
+
+  begin().then( () =>
+  {
+    test.case = 'run from different directory';
+    return null;
+  });
+  a.appStartNonThrowing({ currentPath : a.abs( '..' ), execPath : '.agree dst:./!master src:../repo!master' });
+  a.ready.then( ( op ) =>
+  {
+    test.notIdentical( op.exitCode, 0 );
+    var exp = 'Destination path should be a repository. Please, input valid destination path.';
+    test.identical( _.strCount( op.output, exp ), 1 );
+    return null;
+  });
+  a.shell( 'git log -n 1' );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, /Merge branch \'master\' of .*\/repo into master/ ), 0 );
+    return null;
+  });
+
+  /* */
+
+  begin().then( () =>
+  {
+    test.case = 'pass not valid path';
+    return null;
+  });
+  a.appStartNonThrowing( '.agree dst:../!master src:../repo!master' );
+  a.ready.then( ( op ) =>
+  {
+    test.notIdentical( op.exitCode, 0 );
+    var exp = 'Destination path should be a repository. Please, input valid destination path.';
+    test.identical( _.strCount( op.output, exp ), 1 );
+    return null;
+  });
+  a.shell( 'git log -n 1' );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, /Merge branch \'master\' of .*\/repo into master/ ), 0 );
+    return null;
+  });
+
+  /* - */
+
+  return a.ready;
+
+  /* */
+
+  function begin()
+  {
+    a.ready.then( () => { a.fileProvider.filesDelete( a.abs( '.' ) ); return null });
+    a.ready.then( () => { a.fileProvider.filesDelete( a.abs( '../repo' ) ); return null });
+    a.ready.then( () => { a.fileProvider.dirMake( a.abs( '.' ) ); return null });
+    a.shell( `git clone ${ dstRepositoryRemote } ./` );
+    a.shell( `git reset --hard ${ dstCommit }` );
+    a.shell( `git clone ${ srcRepositoryRemote } ../repo` );
+    return a.shell({ currentPath : a.abs( '../repo' ), execPath : `git reset --hard ${ srcCommit }` });
+  }
+}
+
+//
+
+function agreeWithNotARepository( test )
+{
+  const a = test.assetFor( false );
+  const dstRepositoryRemote = 'https://github.com/Wandalen/wModuleForTesting1.git';
+  const dstCommit = '8e2aa80ca350f3c45215abafa07a4f2cd320342a';
+  const srcRepositoryRemote = 'https://github.com/Wandalen/wModuleForTesting2.git';
+  const srcCommit = '9feb6724d9dc797a1f816dd7ead5f14d45aae8f4';
+
+  /* - */
+
+  begin().then( () =>
+  {
+    test.case = 'agree directory with same files';
+    return null;
+  });
+  a.appStart( `.agree dst:'./!master' src:'../repo'` );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    var config = a.fileProvider.fileReadUnknown( a.abs( 'package.json' ) );
+    test.identical( config.name, 'wmodulefortesting2' );
+    test.identical( config.version, '0.0.181' );
+    var config = a.fileProvider.fileReadUnknown( a.abs( 'was.package.json' ) );
+    test.identical( config.name, 'wmodulefortesting2' );
+    test.identical( config.version, '0.0.181' );
+    return null;
+  });
+  a.shell( 'git log -n 1' );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, /Merge branch \'master\' of .*\/repo into master/ ), 1 );
+    return null;
+  });
+
+  /* - */
+
+  return a.ready;
+
+  /* */
+
+  function begin()
+  {
+    a.ready.then( () => { a.fileProvider.filesDelete( a.abs( '.' ) ); return null });
+    a.ready.then( () => { a.fileProvider.filesDelete( a.abs( '../repo' ) ); return null });
+    a.ready.then( () => { a.fileProvider.dirMake( a.abs( '.' ) ); return null });
+    a.shell( `git clone ${ dstRepositoryRemote } ./` );
+    a.shell( `git reset --hard ${ dstCommit }` );
+    a.shell( `git clone ${ srcRepositoryRemote } ../repo` );
+    a.shell({ currentPath : a.abs( '../repo' ), execPath : `git reset --hard ${ srcCommit }` });
+    return a.ready.then( () => { a.fileProvider.filesDelete( a.abs( '../repo/.git' ) ); return null });
   }
 }
 
@@ -1029,6 +1158,8 @@ function agreeWithOptionDstDirPath( test )
   }
 }
 
+agreeWithOptionDstDirPath.timeOut = 180000;
+
 //
 
 function migrate( test )
@@ -1286,6 +1417,8 @@ function migrateWithOptionOnDateAsMap( test )
   const srcRepositoryRemote = 'https://github.com/Wandalen/wModuleForTesting2.git';
   const srcState1 = 'f68a59ec46b14b1f19b1e3e660e924b9f1f674dd';
   const srcState2 = 'd8c18d24c1d65fab1af6b8d676bba578b58bfad5';
+  const start = Date.parse( '2021-08-11 14:09:46 +0300' );
+  const delta = start - _.time.now() - 3600000;
 
   /* */
 
@@ -1300,6 +1433,7 @@ function migrateWithOptionOnDateAsMap( test )
     return null;
   });
   a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+  a.appStart( `.commits.dates src:'.' state1:'#HEAD' relative:commit delta:${ delta }` );
 
   a.appStart
   (
@@ -1326,6 +1460,8 @@ function migrateWithOptionOnDateAsMap( test )
     test.identical( op[ 0 ].message, originalHistory[ 0 ].message );
     test.identical( Date.parse( op[ 10 ].date ) - Date.parse( originalHistory[ 12 ].date ), 3600000 );
     test.identical( Date.parse( op[ 0 ].date ) - Date.parse( originalHistory[ 0 ].date ), 3600000 );
+    for( let i = 0 ; i < op.length ; i++ )
+    test.identical( op[ i ].date, op[ i ].commiterDate );
     return null;
   });
 
@@ -1337,6 +1473,7 @@ function migrateWithOptionOnDateAsMap( test )
     return null;
   });
   a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+  a.appStart( `.commits.dates src:'.' state1:'#HEAD' relative:commit delta:${ delta }` );
 
   a.appStart
   (
@@ -1365,6 +1502,8 @@ function migrateWithOptionOnDateAsMap( test )
     test.le( Date.parse( op[ 12 ].date ) - Date.now(), 3600000 );
     test.ge( Date.parse( op[ 0 ].date ) - Date.now(), 3500000 );
     test.le( Date.parse( op[ 0 ].date ) - Date.now(), 3600000 );
+    for( let i = 0 ; i < op.length ; i++ )
+    test.identical( op[ i ].date, op[ i ].commiterDate );
     return null;
   });
 
@@ -1376,6 +1515,7 @@ function migrateWithOptionOnDateAsMap( test )
     return null;
   });
   a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+  a.appStart( `.commits.dates src:'.' state1:'#HEAD' relative:commit delta:${ delta - 3600000 }` );
 
   a.appStart
   (
@@ -1402,6 +1542,8 @@ function migrateWithOptionOnDateAsMap( test )
     test.identical( op[ 0 ].message, originalHistory[ 0 ].message );
     test.identical( Date.parse( op[ 10 ].date ) - Date.parse( originalHistory[ 12 ].date ), -3600000 );
     test.identical( Date.parse( op[ 0 ].date ) - Date.parse( originalHistory[ 0 ].date ), -3600000 );
+    for( let i = 0 ; i < op.length ; i++ )
+    test.identical( op[ i ].date, op[ i ].commiterDate );
     return null;
   });
 
@@ -1413,6 +1555,7 @@ function migrateWithOptionOnDateAsMap( test )
     return null;
   });
   a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+  a.appStart( `.commits.dates src:'.' state1:'#HEAD' relative:commit delta:${ delta }` );
 
   a.appStart
   (
@@ -1441,6 +1584,8 @@ function migrateWithOptionOnDateAsMap( test )
     test.le( Date.now() - Date.parse( op[ 12 ].date ), 3700000 );
     test.ge( Date.now() - Date.parse( op[ 0 ].date ), 3500000 );
     test.le( Date.now() - Date.parse( op[ 0 ].date ), 3700000 );
+    for( let i = 0 ; i < op.length ; i++ )
+    test.identical( op[ i ].date, op[ i ].commiterDate );
     return null;
   });
 
@@ -1452,6 +1597,7 @@ function migrateWithOptionOnDateAsMap( test )
     return null;
   });
   a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+  a.appStart( `.commits.dates src:'.' state1:'#HEAD' relative:commit delta:${ delta }` );
 
   a.appStart
   (
@@ -1477,9 +1623,11 @@ function migrateWithOptionOnDateAsMap( test )
     test.notIdentical( op[ 0 ], originalHistory[ 0 ] );
     test.identical( op[ 0 ].message, originalHistory[ 0 ].message );
 
-    test.identical( Date.parse( op[ 11 ].date ) - Date.parse( op[ 12 ].date ), 3600000 );
-    test.identical( Date.parse( op[ 10 ].date ) - Date.parse( op[ 11 ].date ), 3600000 );
-    test.identical( Date.parse( op[ 0 ].date ) - Date.parse( op[ 1 ].date ), 3600000 );
+    test.identical( Date.parse( op[ 13 ].date ) - Date.parse( originalHistory[ 15 ].date ), 2 * 3600000 + 3600000 );
+    test.identical( Date.parse( op[ 11 ].date ) - Date.parse( originalHistory[ 13 ].date ), 4 * 3600000 + 3600000 );
+    test.identical( Date.parse( op[ 0 ].date ) - Date.parse( originalHistory[ 0 ].date ), 15 * 3600000 + 3600000 );
+    for( let i = 0 ; i < op.length ; i++ )
+    test.identical( op[ i ].date, op[ i ].commiterDate );
     return null;
   });
 
@@ -1491,6 +1639,7 @@ function migrateWithOptionOnDateAsMap( test )
     return null;
   });
   a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+  a.appStart( `.commits.dates src:'.' state1:'#HEAD' relative:commit delta:${ delta }` );
 
   a.appStart
   (
@@ -1516,12 +1665,59 @@ function migrateWithOptionOnDateAsMap( test )
     test.notIdentical( op[ 0 ], originalHistory[ 0 ] );
     test.identical( op[ 0 ].message, originalHistory[ 0 ].message );
 
+    test.ge( Date.parse( op[ 13 ].date ) - Date.parse( originalHistory[ 15 ].date ), 2 * 3600000 - 12000000 );
+    test.le( Date.parse( op[ 13 ].date ) - Date.parse( originalHistory[ 15 ].date ), 2 * 3600000 + 12000000 );
+    test.ge( Date.parse( op[ 11 ].date ) - Date.parse( originalHistory[ 13 ].date ), 4 * 3600000 - 12000000 );
+    test.le( Date.parse( op[ 11 ].date ) - Date.parse( originalHistory[ 13 ].date ), 4 * 3600000 + 12000000 );
+    test.ge( Date.parse( op[ 0 ].date ) - Date.parse( originalHistory[ 0 ].date ), 15 * 3600000 - 12000000 );
+    test.le( Date.parse( op[ 0 ].date ) - Date.parse( originalHistory[ 0 ].date ), 15 * 3600000 + 12000000 );
+    for( let i = 0 ; i < op.length ; i++ )
+    test.identical( op[ i ].date, op[ i ].commiterDate );
+    return null;
+  });
+
+  /* */
+
+  begin().then( () =>
+  {
+    test.case = 'delta - one hour, relative - fromFirst, periodic - one hour, deviation - ten minutes';
+    return null;
+  });
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+  a.appStart( `.commits.dates src:'.' state1:'#HEAD' relative:commit delta:${ delta }` );
+
+  a.appStart
+  (
+    `.migrate dst:./!master src:../repo!master srcState1:#${ srcState1 } srcState2:#${ srcState2 } `
+    + `relative:fromFirst delta:'01:00:00' periodic:'01:00:00' deviation:'00:10:00'`
+  );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    return _.git.repositoryHistoryToJson
+    ({
+      localPath : a.abs( '.' ),
+      state1 : '#8e2aa80ca350f3c45215abafa07a4f2cd320342a',
+      state2 : '#HEAD',
+    });
+  });
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.length, 17 );
+    test.notIdentical( op, originalHistory );
+    test.notIdentical( op[ 10 ], originalHistory[ 12 ] );
+    test.identical( op[ 10 ].message, originalHistory[ 12 ].message );
+    test.notIdentical( op[ 0 ], originalHistory[ 0 ] );
+    test.identical( op[ 0 ].message, originalHistory[ 0 ].message );
+
     test.ge( Date.parse( op[ 11 ].date ) - Date.parse( op[ 12 ].date ), 2500000 );
-    test.le( Date.parse( op[ 11 ].date ) - Date.parse( op[ 12 ].date ), 4500000 );
+    test.le( Date.parse( op[ 11 ].date ) - Date.parse( op[ 12 ].date ), 4700000 );
     test.ge( Date.parse( op[ 10 ].date ) - Date.parse( op[ 11 ].date ), 2500000 );
-    test.le( Date.parse( op[ 10 ].date ) - Date.parse( op[ 11 ].date ), 4500000 );
+    test.le( Date.parse( op[ 10 ].date ) - Date.parse( op[ 11 ].date ), 4700000 );
     test.ge( Date.parse( op[ 0 ].date ) - Date.parse( op[ 1 ].date ), 2500000 );
-    test.le( Date.parse( op[ 0 ].date ) - Date.parse( op[ 1 ].date ), 4500000 );
+    test.le( Date.parse( op[ 0 ].date ) - Date.parse( op[ 1 ].date ), 4700000 );
+    for( let i = 0 ; i < op.length ; i++ )
+    test.identical( op[ i ].date, op[ i ].commiterDate );
     return null;
   });
 
@@ -2572,7 +2768,7 @@ function commitsDates( test )
     test.case = 'relative - commit, change no date';
     return null;
   });
-  a.appStart( `.commits.dates src:${ a.abs( '.' ) } state1:'#af36e28bc91b6f18e4babc810bbf5bc758ccf19f' relative:commit delta:0` );
+  a.appStart( `.commits.dates src:'.' state1:'#af36e28bc91b6f18e4babc810bbf5bc758ccf19f' relative:commit delta:0` );
   a.ready.then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
@@ -2599,7 +2795,7 @@ function commitsDates( test )
   });
   a.appStart
   (
-    `.commits.dates src:${ a.abs( '.' ) } state1:'#af36e28bc91b6f18e4babc810bbf5bc758ccf19f' `
+    `.commits.dates src:'.' state1:'#af36e28bc91b6f18e4babc810bbf5bc758ccf19f' `
     + `state2:'#af815d4eaaf1df0505da1e1b2e526a7d04cdce7e' relative:commit delta:0`
   );
   a.ready.then( ( op ) =>
@@ -3309,7 +3505,7 @@ function commitsDatesWithOptionPeriodic( test )
     test.identical( op[ 0 ].message, originalHistory[ 0 ].message );
     test.identical( op[ 0 ].author, originalHistory[ 0 ].author );
     test.ge( Date.parse( op[ 11 ].date ) - _.time.now(), 3500000 );
-    test.le( Date.parse( op[ 11 ].date ) - _.time.now(), 3600000 );
+    test.le( Date.parse( op[ 11 ].date ) - _.time.now(), 7200000 );
 
     test.identical( Date.parse( op[ 11 ].date ) - Date.parse( op[ 12 ].date ), 3600000 );
     test.identical( Date.parse( op[ 10 ].date ) - Date.parse( op[ 11 ].date ), 3600000 );
@@ -3351,9 +3547,9 @@ function commitsDatesWithOptionPeriodic( test )
     test.identical( op[ 0 ].message, originalHistory[ 0 ].message );
     test.identical( op[ 0 ].author, originalHistory[ 0 ].author );
 
-    test.identical( Date.parse( op[ 11 ].date ) - Date.parse( op[ 12 ].date ), 3600000 );
-    test.identical( Date.parse( op[ 10 ].date ) - Date.parse( op[ 11 ].date ), 3600000 );
-    test.identical( Date.parse( op[ 0 ].date ) - Date.parse( op[ 1 ].date ), 3600000 );
+    test.identical( Date.parse( op[ 11 ].date ) - Date.parse( originalHistory[ 11 ].date ), 2 * 3600000 );
+    test.identical( Date.parse( op[ 10 ].date ) - Date.parse( originalHistory[ 10 ].date ), 3 * 3600000 );
+    test.identical( Date.parse( op[ 0 ].date ) - Date.parse( originalHistory[ 0 ].date ), 13 * 3600000 );
     return null;
   });
 
@@ -3480,6 +3676,8 @@ const Proto =
   tests :
   {
     agree,
+    agreeRunWithWrongDst,
+    agreeWithNotARepository,
     agreeWithOptionMessage,
     agreeWithOptionBut,
     agreeWithOptionOnly,
