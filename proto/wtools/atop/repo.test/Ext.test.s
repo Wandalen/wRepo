@@ -1711,11 +1711,11 @@ function migrateWithOptionOnDateAsMap( test )
     test.identical( op[ 0 ].message, originalHistory[ 0 ].message );
 
     test.ge( Date.parse( op[ 11 ].date ) - Date.parse( op[ 12 ].date ), 2500000 );
-    test.le( Date.parse( op[ 11 ].date ) - Date.parse( op[ 12 ].date ), 4600000 );
+    test.le( Date.parse( op[ 11 ].date ) - Date.parse( op[ 12 ].date ), 4700000 );
     test.ge( Date.parse( op[ 10 ].date ) - Date.parse( op[ 11 ].date ), 2500000 );
-    test.le( Date.parse( op[ 10 ].date ) - Date.parse( op[ 11 ].date ), 4600000 );
+    test.le( Date.parse( op[ 10 ].date ) - Date.parse( op[ 11 ].date ), 4700000 );
     test.ge( Date.parse( op[ 0 ].date ) - Date.parse( op[ 1 ].date ), 2500000 );
-    test.le( Date.parse( op[ 0 ].date ) - Date.parse( op[ 1 ].date ), 4600000 );
+    test.le( Date.parse( op[ 0 ].date ) - Date.parse( op[ 1 ].date ), 4700000 );
     for( let i = 0 ; i < op.length ; i++ )
     test.identical( op[ i ].date, op[ i ].commiterDate );
     return null;
