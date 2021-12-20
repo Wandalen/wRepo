@@ -1407,6 +1407,8 @@ function migrateWithOptionOnMessage( test )
   }
 }
 
+migrateWithOptionOnMessage.timeOut = 120000;
+
 //
 
 function migrateWithOptionOnDateAsMap( test )
