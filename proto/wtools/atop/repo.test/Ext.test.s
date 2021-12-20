@@ -1279,6 +1279,8 @@ function migrate( test )
   }
 }
 
+migrate.timeOut = 120000;
+
 //
 
 function migrateWithOptionOnMessage( test )
