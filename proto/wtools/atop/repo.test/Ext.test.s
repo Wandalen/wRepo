@@ -3659,6 +3659,8 @@ function commitsDatesWithOptionDeviation( test )
   }
 }
 
+commitsDatesWithOptionDeviation.timeOut = 120000;
+
 // --
 // declare
 // --
