@@ -146,7 +146,7 @@ function repositoryMigrate( o )
 
   let onCommitMessage = o.onMessage;
   if( onCommitMessage )
-  onCommitMessage = require( _.path.join( _.path.current(), onCommitMessage ) );
+  onCommitMessage = require( _.path.nativize( _.path.join( _.path.current(), onCommitMessage ) ) );
 
   let onDate = o.onDate;
   if( o.onDate === 'construct' )
@@ -159,7 +159,7 @@ function repositoryMigrate( o )
   }
   else
   {
-    onDate = require( _.path.join( _.path.current(), onDate ) );
+    onDate = require( _.path.nativize( _.path.join( _.path.current(), onDate ) ) );
   }
 
   const ready = _.take( null ).then( () =>

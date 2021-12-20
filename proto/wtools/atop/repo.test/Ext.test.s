@@ -67,7 +67,7 @@ function agree( test )
   a.ready.then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
-    test.identical( _.strCount( op.output, /Merge branch \'master\' of .*\/repo into master/ ), 1 );
+    test.identical( _.strCount( op.output, /Merge branch \'master\' of .*(\/|\\)repo into master/ ), 1 );
     return null;
   });
 
@@ -95,7 +95,7 @@ function agree( test )
   a.ready.then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
-    test.identical( _.strCount( op.output, /Merge branch \'master\' of .*\/repo.* into master/ ), 1 );
+    test.identical( _.strCount( op.output, /Merge branch \'master\' of .*(\/|\\)repo.* into master/ ), 1 );
     return null;
   });
 
@@ -277,7 +277,7 @@ function agreeWithNotARepository( test )
   a.ready.then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
-    test.identical( _.strCount( op.output, /Merge branch \'master\' of .*\/repo into master/ ), 1 );
+    test.identical( _.strCount( op.output, /Merge branch \'master\' of .*(\/|\\)repo into master/ ), 1 );
     return null;
   });
 
@@ -945,6 +945,8 @@ function agreeWithOptionSrcDirPath( test )
   }
 }
 
+agreeWithOptionSrcDirPath.timeOut = 120000;
+
 //
 
 function agreeWithOptionDstDirPath( test )
@@ -1279,6 +1281,8 @@ function migrate( test )
   }
 }
 
+migrate.timeOut = 120000;
+
 //
 
 function migrateWithOptionOnMessage( test )
@@ -1406,6 +1410,8 @@ function migrateWithOptionOnMessage( test )
     return a.shell( `git clone ${ srcRepositoryRemote } ../repo` );
   }
 }
+
+migrateWithOptionOnMessage.timeOut = 120000;
 
 //
 
@@ -3652,6 +3658,8 @@ function commitsDatesWithOptionDeviation( test )
     return a.shell( `git reset --hard ${ srcCommit }` );
   }
 }
+
+commitsDatesWithOptionDeviation.timeOut = 120000;
 
 // --
 // declare
