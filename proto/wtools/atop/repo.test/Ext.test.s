@@ -945,6 +945,8 @@ function agreeWithOptionSrcDirPath( test )
   }
 }
 
+agreeWithOptionSrcDirPath.timeOut = 120000;
+
 //
 
 function agreeWithOptionDstDirPath( test )
