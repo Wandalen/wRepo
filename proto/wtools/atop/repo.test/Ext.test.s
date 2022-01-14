@@ -945,8 +945,6 @@ function agreeWithOptionSrcDirPath( test )
   }
 }
 
-agreeWithOptionSrcDirPath.timeOut = 120000;
-
 //
 
 function agreeWithOptionDstDirPath( test )
@@ -1476,8 +1474,6 @@ function migrate( test )
   }
 }
 
-migrate.timeOut = 120000;
-
 //
 
 function migrateWithOptionOnMessage( test )
@@ -1605,8 +1601,6 @@ function migrateWithOptionOnMessage( test )
     return a.shell( `git clone ${ srcRepositoryRemote } ../repo` );
   }
 }
-
-migrateWithOptionOnMessage.timeOut = 120000;
 
 //
 
@@ -3035,8 +3029,6 @@ function migrateWithOptionVerbosity( test )
   }
 }
 
-migrateWithOptionVerbosity.timeOut = 120000;
-
 //
 
 function migrateWithOptionDry( test )
@@ -3204,8 +3196,6 @@ function migrateWithOptionDry( test )
     return a.shell( `git clone ${ srcRepositoryRemote } ../repo` );
   }
 }
-
-migrateWithOptionDry.timeOut = 120000;
 
 //
 
@@ -3725,8 +3715,6 @@ function commitsDatesWithOptionDelta( test )
   }
 }
 
-commitsDatesWithOptionDelta.timeOut = 120000;
-
 //
 
 function commitsDatesWithOptionDeltaAsString( test )
@@ -4126,8 +4114,6 @@ function commitsDatesWithOptionDeviation( test )
   }
 }
 
-commitsDatesWithOptionDeviation.timeOut = 120000;
-
 // --
 // declare
 // --
@@ -4140,7 +4126,7 @@ const Proto =
 
   onSuiteBegin,
   onSuiteEnd,
-  routineTimeOut : 60000,
+  routineTimeOut : 120000,
 
   context :
   {
