@@ -179,6 +179,8 @@ function repositoryMigrate( o )
       onDate,
       but : o.but,
       only : o.only,
+      logger : o.dry ? 2 : o.verbosity,
+      dry : o.dry,
     });
   });
   return ready.finally( ( err, arg ) =>
@@ -206,6 +208,9 @@ repositoryMigrate.defaults =
   delta : 0,
   periodic : 0,
   deviation : 0,
+
+  verbosity : 1,
+  dry : 0,
 };
 
 //
