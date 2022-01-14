@@ -1248,6 +1248,90 @@ function agreeWithOptionVerbosity( test )
 
 //
 
+function agreeWithOptionDry( test )
+{
+  const a = test.assetFor( false );
+  const dstRepositoryRemote = 'https://github.com/Wandalen/wModuleForTesting1.git';
+  const dstCommit = '8e2aa80ca350f3c45215abafa07a4f2cd320342a';
+  const srcRepositoryRemote = 'https://github.com/Wandalen/wModuleForTesting2.git';
+  const srcState = 'f68a59ec46b14b1f19b1e3e660e924b9f1f674dd';
+
+  /* - */
+
+  begin();
+  a.ready.then( () =>
+  {
+    test.case = 'verbosity - 2, dry - 0';
+    return null;
+  });
+  a.appStart( '.agree dst:./!master src:../repo!master verbosity:2 dry:0' );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, 'doc/ModuleForTesting2.md' ), 1 );
+    test.identical( _.strCount( op.output, 'out/wModuleForTesting2.out.will.yml' ), 1 );
+    test.identical( _.strCount( op.output, 'proto/node_modules/wmodulefortesting2' ), 1 );
+    test.identical( _.strCount( op.output, 'proto/wtools/testing/l2/testing2/ModuleForTesting2.s' ), 1 );
+    return null;
+  });
+
+  /* */
+
+  begin();
+  a.ready.then( () =>
+  {
+    test.case = 'verbosity - 2, dry - 1';
+    return null;
+  });
+  a.appStart( '.agree dst:./!master src:../repo!master verbosity:2 dry:1' );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, 'doc/ModuleForTesting2.md' ), 1 );
+    test.identical( _.strCount( op.output, 'out/wModuleForTesting2.out.will.yml' ), 1 );
+    test.identical( _.strCount( op.output, 'proto/node_modules/wmodulefortesting2' ), 1 );
+    test.identical( _.strCount( op.output, 'proto/wtools/testing/l2/testing2/ModuleForTesting2.s' ), 1 );
+    return null;
+  });
+
+  /* */
+
+  begin();
+  a.ready.then( () =>
+  {
+    test.case = 'verbosity - 0, dry - 1';
+    return null;
+  });
+  a.appStart( '.agree dst:./!master src:../repo!master verbosity:0 dry:1' );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, 'doc/ModuleForTesting2.md' ), 1 );
+    test.identical( _.strCount( op.output, 'out/wModuleForTesting2.out.will.yml' ), 1 );
+    test.identical( _.strCount( op.output, 'proto/node_modules/wmodulefortesting2' ), 1 );
+    test.identical( _.strCount( op.output, 'proto/wtools/testing/l2/testing2/ModuleForTesting2.s' ), 1 );
+    return null;
+  });
+
+  /* - */
+
+  return a.ready;
+
+  /* */
+
+  function begin()
+  {
+    a.ready.then( () => { a.fileProvider.filesDelete( a.abs( '.' ) ); return null });
+    a.ready.then( () => { a.fileProvider.filesDelete( a.abs( '../repo' ) ); return null });
+    a.ready.then( () => { a.fileProvider.dirMake( a.abs( '.' ) ); return null });
+    a.shell( `git clone ${ dstRepositoryRemote } ./` );
+    a.shell( `git reset --hard ${ dstCommit }` );
+    return a.shell( `git clone ${ srcRepositoryRemote } ../repo` );
+  }
+}
+
+//
+
 function migrate( test )
 {
   const a = test.assetFor( false );
@@ -3776,6 +3860,7 @@ const Proto =
     agreeWithOptionSrcDirPath,
     agreeWithOptionDstDirPath,
     agreeWithOptionVerbosity,
+    agreeWithOptionDry,
 
     migrate,
     migrateWithOptionOnMessage,
