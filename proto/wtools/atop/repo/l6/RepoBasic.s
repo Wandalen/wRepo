@@ -94,7 +94,8 @@ function repositoryAgree( o )
       mergeStrategy : o.mergeStrategy,
       but : o.but,
       only : o.only,
-      logger : 2,
+      logger : o.dry ? 2 : o.verbosity,
+      dry : o.dry,
     });
   });
   return ready.finally( ( err, arg ) =>
@@ -115,6 +116,8 @@ repositoryAgree.defaults =
   mergeStrategy : null,
   but : null,
   only : null,
+  verbosity : 1,
+  dry : 0,
 };
 
 //

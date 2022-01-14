@@ -159,6 +159,10 @@ commandAgree.defaults =
 };
 command.hint = 'Synchronize repository with another repository / directory.';
 command.subjectHint = false;
+command.propertiesAliases =
+{
+  verbosity : [ 'v' ]
+};
 command.properties =
 {
   src : 'A path to source repository. Should contains a branch / tag / version to agree with.',
@@ -169,6 +173,8 @@ command.properties =
   mergeStrategy : 'A strategy to resolve conflicts in merged files. \n\tStrategies : \n\t`src` - apply external repository changes, \n\t`dst` - save original repository changes, \n\t`manual` - resolve conflicts manually. \n\tDefault is `src`.',
   but : 'A pattern or array of patterns to exclude from merge. Could be a glob.',
   only : 'A pattern or array of patterns to include in merge. Could be a glob.',
+  verbosity : 'Set verbosity. Default is 1.',
+  dry : 'Dry run without changes in repository. Default is 0. If `dry` is 1, then command will print list of files to change.',
 };
 
 //
