@@ -1262,6 +1262,10 @@ function agreeWithOptionDry( test )
   a.ready.then( () =>
   {
     test.case = 'verbosity - 2, dry - 0';
+    test.false( a.fileProvider.fileExists( a.abs( 'doc/ModuleForTesting2.md' ) ) );
+    test.false( a.fileProvider.fileExists( a.abs( 'out/wModuleForTesting2.out.will.yml' ) ) );
+    test.false( a.fileProvider.fileExists( a.abs( 'proto/node_modules/wmodulefortesting2' ) ) );
+    test.false( a.fileProvider.fileExists( a.abs( 'proto/wtools/testing/l2/testing2/ModuleForTesting2.s' ) ) );
     return null;
   });
   a.appStart( '.agree dst:./!master src:../repo!master verbosity:2 dry:0' );
@@ -1272,6 +1276,11 @@ function agreeWithOptionDry( test )
     test.identical( _.strCount( op.output, 'out/wModuleForTesting2.out.will.yml' ), 1 );
     test.identical( _.strCount( op.output, 'proto/node_modules/wmodulefortesting2' ), 1 );
     test.identical( _.strCount( op.output, 'proto/wtools/testing/l2/testing2/ModuleForTesting2.s' ), 1 );
+
+    test.true( a.fileProvider.fileExists( a.abs( 'doc/ModuleForTesting2.md' ) ) );
+    test.true( a.fileProvider.fileExists( a.abs( 'out/wModuleForTesting2.out.will.yml' ) ) );
+    test.true( a.fileProvider.fileExists( a.abs( 'proto/node_modules/wmodulefortesting2' ) ) );
+    test.true( a.fileProvider.fileExists( a.abs( 'proto/wtools/testing/l2/testing2/ModuleForTesting2.s' ) ) );
     return null;
   });
 
@@ -1281,6 +1290,10 @@ function agreeWithOptionDry( test )
   a.ready.then( () =>
   {
     test.case = 'verbosity - 2, dry - 1';
+    test.false( a.fileProvider.fileExists( a.abs( 'doc/ModuleForTesting2.md' ) ) );
+    test.false( a.fileProvider.fileExists( a.abs( 'out/wModuleForTesting2.out.will.yml' ) ) );
+    test.false( a.fileProvider.fileExists( a.abs( 'proto/node_modules/wmodulefortesting2' ) ) );
+    test.false( a.fileProvider.fileExists( a.abs( 'proto/wtools/testing/l2/testing2/ModuleForTesting2.s' ) ) );
     return null;
   });
   a.appStart( '.agree dst:./!master src:../repo!master verbosity:2 dry:1' );
@@ -1291,6 +1304,11 @@ function agreeWithOptionDry( test )
     test.identical( _.strCount( op.output, 'out/wModuleForTesting2.out.will.yml' ), 1 );
     test.identical( _.strCount( op.output, 'proto/node_modules/wmodulefortesting2' ), 1 );
     test.identical( _.strCount( op.output, 'proto/wtools/testing/l2/testing2/ModuleForTesting2.s' ), 1 );
+
+    test.false( a.fileProvider.fileExists( a.abs( 'doc/ModuleForTesting2.md' ) ) );
+    test.false( a.fileProvider.fileExists( a.abs( 'out/wModuleForTesting2.out.will.yml' ) ) );
+    test.false( a.fileProvider.fileExists( a.abs( 'proto/node_modules/wmodulefortesting2' ) ) );
+    test.false( a.fileProvider.fileExists( a.abs( 'proto/wtools/testing/l2/testing2/ModuleForTesting2.s' ) ) );
     return null;
   });
 
@@ -1300,6 +1318,10 @@ function agreeWithOptionDry( test )
   a.ready.then( () =>
   {
     test.case = 'verbosity - 0, dry - 1';
+    test.false( a.fileProvider.fileExists( a.abs( 'doc/ModuleForTesting2.md' ) ) );
+    test.false( a.fileProvider.fileExists( a.abs( 'out/wModuleForTesting2.out.will.yml' ) ) );
+    test.false( a.fileProvider.fileExists( a.abs( 'proto/node_modules/wmodulefortesting2' ) ) );
+    test.false( a.fileProvider.fileExists( a.abs( 'proto/wtools/testing/l2/testing2/ModuleForTesting2.s' ) ) );
     return null;
   });
   a.appStart( '.agree dst:./!master src:../repo!master verbosity:0 dry:1' );
@@ -1310,6 +1332,11 @@ function agreeWithOptionDry( test )
     test.identical( _.strCount( op.output, 'out/wModuleForTesting2.out.will.yml' ), 1 );
     test.identical( _.strCount( op.output, 'proto/node_modules/wmodulefortesting2' ), 1 );
     test.identical( _.strCount( op.output, 'proto/wtools/testing/l2/testing2/ModuleForTesting2.s' ), 1 );
+
+    test.false( a.fileProvider.fileExists( a.abs( 'doc/ModuleForTesting2.md' ) ) );
+    test.false( a.fileProvider.fileExists( a.abs( 'out/wModuleForTesting2.out.will.yml' ) ) );
+    test.false( a.fileProvider.fileExists( a.abs( 'proto/node_modules/wmodulefortesting2' ) ) );
+    test.false( a.fileProvider.fileExists( a.abs( 'proto/wtools/testing/l2/testing2/ModuleForTesting2.s' ) ) );
     return null;
   });
 
