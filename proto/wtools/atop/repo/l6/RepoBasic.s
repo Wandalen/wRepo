@@ -145,7 +145,7 @@ function repositoryMigrate( o )
     && srcParsed.tag === 'master'
     && !_.str.has( o.src, _.git.path.tagToken )
   )
-  srcParsed.tag = _.git.tagLocalRetrive({ localPath : o.src });
+  srcParsed.tag = _.git.tagLocalRetrive({ localPath : _.git.path.nativize( o.src ) });
 
   let onCommitMessage = o.onMessage;
   if( onCommitMessage )
