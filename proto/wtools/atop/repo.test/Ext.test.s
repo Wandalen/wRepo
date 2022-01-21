@@ -945,8 +945,6 @@ function agreeWithOptionSrcDirPath( test )
   }
 }
 
-agreeWithOptionSrcDirPath.timeOut = 120000;
-
 //
 
 function agreeWithOptionDstDirPath( test )
@@ -1164,6 +1162,201 @@ agreeWithOptionDstDirPath.timeOut = 180000;
 
 //
 
+function agreeWithOptionVerbosity( test )
+{
+  const a = test.assetFor( false );
+  const dstRepositoryRemote = 'https://github.com/Wandalen/wModuleForTesting1.git';
+  const dstCommit = '8e2aa80ca350f3c45215abafa07a4f2cd320342a';
+  const srcRepositoryRemote = 'https://github.com/Wandalen/wModuleForTesting2.git';
+  const srcState = 'f68a59ec46b14b1f19b1e3e660e924b9f1f674dd';
+
+  /* - */
+
+  begin();
+  a.ready.then( () =>
+  {
+    test.case = 'verbosity - 0, full option';
+    return null;
+  });
+  a.appStart( '.agree dst:./!master src:../repo!master verbosity:0' );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, 'doc/ModuleForTesting2.md' ), 0 );
+    test.identical( _.strCount( op.output, 'out/wModuleForTesting2.out.will.yml' ), 0 );
+    test.identical( _.strCount( op.output, 'proto/node_modules/wmodulefortesting2' ), 0 );
+    test.identical( _.strCount( op.output, 'proto/wtools/testing/l2/testing2/ModuleForTesting2.s' ), 0 );
+    return null;
+  });
+
+  /* */
+
+  begin();
+  a.ready.then( () =>
+  {
+    test.case = 'verbosity - 1, short option';
+    return null;
+  });
+  a.appStart( '.agree dst:./!master src:../repo!master v:1' );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, 'doc/ModuleForTesting2.md' ), 0 );
+    test.identical( _.strCount( op.output, 'out/wModuleForTesting2.out.will.yml' ), 0 );
+    test.identical( _.strCount( op.output, 'proto/node_modules/wmodulefortesting2' ), 0 );
+    test.identical( _.strCount( op.output, 'proto/wtools/testing/l2/testing2/ModuleForTesting2.s' ), 0 );
+    return null;
+  });
+
+  /* */
+
+  begin();
+  a.ready.then( () =>
+  {
+    test.case = 'verbosity - 2, full option';
+    return null;
+  });
+  a.appStart( '.agree dst:./!master src:../repo!master verbosity:2' );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, 'doc/ModuleForTesting2.md' ), 1 );
+    test.identical( _.strCount( op.output, 'out/wModuleForTesting2.out.will.yml' ), 1 );
+    test.identical( _.strCount( op.output, 'proto/node_modules/wmodulefortesting2' ), 1 );
+    test.identical( _.strCount( op.output, 'proto/wtools/testing/l2/testing2/ModuleForTesting2.s' ), 1 );
+    return null;
+  });
+
+  /* - */
+
+  return a.ready;
+
+  /* */
+
+  function begin()
+  {
+    a.ready.then( () => { a.fileProvider.filesDelete( a.abs( '.' ) ); return null });
+    a.ready.then( () => { a.fileProvider.filesDelete( a.abs( '../repo' ) ); return null });
+    a.ready.then( () => { a.fileProvider.dirMake( a.abs( '.' ) ); return null });
+    a.shell( `git clone ${ dstRepositoryRemote } ./` );
+    a.shell( `git reset --hard ${ dstCommit }` );
+    return a.shell( `git clone ${ srcRepositoryRemote } ../repo` );
+  }
+}
+
+//
+
+function agreeWithOptionDry( test )
+{
+  const a = test.assetFor( false );
+  const dstRepositoryRemote = 'https://github.com/Wandalen/wModuleForTesting1.git';
+  const dstCommit = '8e2aa80ca350f3c45215abafa07a4f2cd320342a';
+  const srcRepositoryRemote = 'https://github.com/Wandalen/wModuleForTesting2.git';
+  const srcState = 'f68a59ec46b14b1f19b1e3e660e924b9f1f674dd';
+
+  /* - */
+
+  begin();
+  a.ready.then( () =>
+  {
+    test.case = 'verbosity - 2, dry - 0';
+    test.false( a.fileProvider.fileExists( a.abs( 'doc/ModuleForTesting2.md' ) ) );
+    test.false( a.fileProvider.fileExists( a.abs( 'out/wModuleForTesting2.out.will.yml' ) ) );
+    test.false( a.fileProvider.fileExists( a.abs( 'proto/node_modules/wmodulefortesting2' ) ) );
+    test.false( a.fileProvider.fileExists( a.abs( 'proto/wtools/testing/l2/testing2/ModuleForTesting2.s' ) ) );
+    return null;
+  });
+  a.appStart( '.agree dst:./!master src:../repo!master verbosity:2 dry:0' );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, 'doc/ModuleForTesting2.md' ), 1 );
+    test.identical( _.strCount( op.output, 'out/wModuleForTesting2.out.will.yml' ), 1 );
+    test.identical( _.strCount( op.output, 'proto/node_modules/wmodulefortesting2' ), 1 );
+    test.identical( _.strCount( op.output, 'proto/wtools/testing/l2/testing2/ModuleForTesting2.s' ), 1 );
+
+    test.true( a.fileProvider.fileExists( a.abs( 'doc/ModuleForTesting2.md' ) ) );
+    test.true( a.fileProvider.fileExists( a.abs( 'out/wModuleForTesting2.out.will.yml' ) ) );
+    test.true( a.fileProvider.fileExists( a.abs( 'proto/node_modules/wmodulefortesting2' ) ) );
+    test.true( a.fileProvider.fileExists( a.abs( 'proto/wtools/testing/l2/testing2/ModuleForTesting2.s' ) ) );
+    return null;
+  });
+
+  /* */
+
+  begin();
+  a.ready.then( () =>
+  {
+    test.case = 'verbosity - 2, dry - 1';
+    test.false( a.fileProvider.fileExists( a.abs( 'doc/ModuleForTesting2.md' ) ) );
+    test.false( a.fileProvider.fileExists( a.abs( 'out/wModuleForTesting2.out.will.yml' ) ) );
+    test.false( a.fileProvider.fileExists( a.abs( 'proto/node_modules/wmodulefortesting2' ) ) );
+    test.false( a.fileProvider.fileExists( a.abs( 'proto/wtools/testing/l2/testing2/ModuleForTesting2.s' ) ) );
+    return null;
+  });
+  a.appStart( '.agree dst:./!master src:../repo!master verbosity:2 dry:1' );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, 'doc/ModuleForTesting2.md' ), 1 );
+    test.identical( _.strCount( op.output, 'out/wModuleForTesting2.out.will.yml' ), 1 );
+    test.identical( _.strCount( op.output, 'proto/node_modules/wmodulefortesting2' ), 1 );
+    test.identical( _.strCount( op.output, 'proto/wtools/testing/l2/testing2/ModuleForTesting2.s' ), 1 );
+
+    test.false( a.fileProvider.fileExists( a.abs( 'doc/ModuleForTesting2.md' ) ) );
+    test.false( a.fileProvider.fileExists( a.abs( 'out/wModuleForTesting2.out.will.yml' ) ) );
+    test.false( a.fileProvider.fileExists( a.abs( 'proto/node_modules/wmodulefortesting2' ) ) );
+    test.false( a.fileProvider.fileExists( a.abs( 'proto/wtools/testing/l2/testing2/ModuleForTesting2.s' ) ) );
+    return null;
+  });
+
+  /* */
+
+  begin();
+  a.ready.then( () =>
+  {
+    test.case = 'verbosity - 0, dry - 1';
+    test.false( a.fileProvider.fileExists( a.abs( 'doc/ModuleForTesting2.md' ) ) );
+    test.false( a.fileProvider.fileExists( a.abs( 'out/wModuleForTesting2.out.will.yml' ) ) );
+    test.false( a.fileProvider.fileExists( a.abs( 'proto/node_modules/wmodulefortesting2' ) ) );
+    test.false( a.fileProvider.fileExists( a.abs( 'proto/wtools/testing/l2/testing2/ModuleForTesting2.s' ) ) );
+    return null;
+  });
+  a.appStart( '.agree dst:./!master src:../repo!master verbosity:0 dry:1' );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, 'doc/ModuleForTesting2.md' ), 1 );
+    test.identical( _.strCount( op.output, 'out/wModuleForTesting2.out.will.yml' ), 1 );
+    test.identical( _.strCount( op.output, 'proto/node_modules/wmodulefortesting2' ), 1 );
+    test.identical( _.strCount( op.output, 'proto/wtools/testing/l2/testing2/ModuleForTesting2.s' ), 1 );
+
+    test.false( a.fileProvider.fileExists( a.abs( 'doc/ModuleForTesting2.md' ) ) );
+    test.false( a.fileProvider.fileExists( a.abs( 'out/wModuleForTesting2.out.will.yml' ) ) );
+    test.false( a.fileProvider.fileExists( a.abs( 'proto/node_modules/wmodulefortesting2' ) ) );
+    test.false( a.fileProvider.fileExists( a.abs( 'proto/wtools/testing/l2/testing2/ModuleForTesting2.s' ) ) );
+    return null;
+  });
+
+  /* - */
+
+  return a.ready;
+
+  /* */
+
+  function begin()
+  {
+    a.ready.then( () => { a.fileProvider.filesDelete( a.abs( '.' ) ); return null });
+    a.ready.then( () => { a.fileProvider.filesDelete( a.abs( '../repo' ) ); return null });
+    a.ready.then( () => { a.fileProvider.dirMake( a.abs( '.' ) ); return null });
+    a.shell( `git clone ${ dstRepositoryRemote } ./` );
+    a.shell( `git reset --hard ${ dstCommit }` );
+    return a.shell( `git clone ${ srcRepositoryRemote } ../repo` );
+  }
+}
+
+//
+
 function migrate( test )
 {
   const a = test.assetFor( false );
@@ -1280,8 +1473,6 @@ function migrate( test )
     return a.shell( `git clone ${ srcRepositoryRemote } ../repo` );
   }
 }
-
-migrate.timeOut = 120000;
 
 //
 
@@ -1410,8 +1601,6 @@ function migrateWithOptionOnMessage( test )
     return a.shell( `git clone ${ srcRepositoryRemote } ../repo` );
   }
 }
-
-migrateWithOptionOnMessage.timeOut = 120000;
 
 //
 
@@ -2742,6 +2931,274 @@ migrateWithOptionDstDirPath.timeOut = 180000;
 
 //
 
+function migrateWithOptionVerbosity( test )
+{
+  const a = test.assetFor( false );
+  const dstRepositoryRemote = 'https://github.com/Wandalen/wModuleForTesting1.git';
+  const dstCommit = '8e2aa80ca350f3c45215abafa07a4f2cd320342a';
+  const srcRepositoryRemote = 'https://github.com/Wandalen/wModuleForTesting2.git';
+  const srcState1 = 'f68a59ec46b14b1f19b1e3e660e924b9f1f674dd';
+  const srcState2 = 'd8c18d24c1d65fab1af6b8d676bba578b58bfad5';
+
+  /* - */
+
+  begin();
+  a.ready.then( () =>
+  {
+    test.case = 'verbosity - 0, full option';
+    return null;
+  });
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+
+  a.appStart( `.migrate dst:./!master src:../repo!master srcState1:#${ srcState1 } srcState2:#${ srcState2 } verbosity:0` );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, 'List of commits to migrate :' ), 0 );
+    test.identical( _.strCount( op.output, 'author' ), 0 );
+    test.identical( _.strCount( op.output, 'email' ), 0 );
+    test.identical( _.strCount( op.output, 'hash' ), 0 );
+    test.identical( _.strCount( op.output, 'message' ), 0 );
+    test.identical( _.strCount( op.output, 'date' ), 0 );
+    test.identical( _.strCount( op.output, 'commiterDate' ), 0 );
+    return null;
+  });
+
+  /* */
+
+  begin();
+  a.ready.then( () =>
+  {
+    test.case = 'verbosity - 1, short option';
+    return null;
+  });
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+
+  a.appStart( `.migrate dst:./!master src:../repo!master srcState1:#${ srcState1 } srcState2:#${ srcState2 } v:1` );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, 'List of commits to migrate :' ), 0 );
+    test.identical( _.strCount( op.output, 'author' ), 0 );
+    test.identical( _.strCount( op.output, 'email' ), 0 );
+    test.identical( _.strCount( op.output, 'hash' ), 0 );
+    test.identical( _.strCount( op.output, 'message' ), 0 );
+    test.identical( _.strCount( op.output, 'date' ), 0 );
+    test.identical( _.strCount( op.output, 'commiterDate' ), 0 );
+    return null;
+  });
+
+  /* */
+
+  begin();
+  a.ready.then( () =>
+  {
+    test.case = 'verbosity - 2, short option';
+    return null;
+  });
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+
+  a.appStart( `.migrate dst:./!master src:../repo!master srcState1:#${ srcState1 } srcState2:#${ srcState2 } v:2` );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, 'List of commits to migrate :' ), 1 );
+    test.identical( _.strCount( op.output, 'author' ), 18 );
+    test.identical( _.strCount( op.output, 'email' ), 18 );
+    test.identical( _.strCount( op.output, 'hash' ), 18 );
+    test.identical( _.strCount( op.output, 'message' ), 18 );
+    test.identical( _.strCount( op.output, 'date' ), 18 );
+    test.identical( _.strCount( op.output, 'commiterDate' ), 18 );
+    return null;
+  });
+
+  /* - */
+
+  return a.ready;
+
+  /* */
+
+  function begin()
+  {
+    a.ready.then( () => { a.fileProvider.filesDelete( a.abs( '.' ) ); return null });
+    a.ready.then( () => { a.fileProvider.filesDelete( a.abs( '../repo' ) ); return null });
+    a.ready.then( () => { a.fileProvider.dirMake( a.abs( '.' ) ); return null });
+    a.shell( `git clone ${ dstRepositoryRemote } ./` );
+    a.shell( `git reset --hard ${ dstCommit }` );
+    return a.shell( `git clone ${ srcRepositoryRemote } ../repo` );
+  }
+}
+
+//
+
+function migrateWithOptionDry( test )
+{
+  const a = test.assetFor( false );
+  const dstRepositoryRemote = 'https://github.com/Wandalen/wModuleForTesting1.git';
+  const dstCommit = '8e2aa80ca350f3c45215abafa07a4f2cd320342a';
+  const srcRepositoryRemote = 'https://github.com/Wandalen/wModuleForTesting2.git';
+  const srcState1 = 'f68a59ec46b14b1f19b1e3e660e924b9f1f674dd';
+  const srcState2 = 'd8c18d24c1d65fab1af6b8d676bba578b58bfad5';
+  const user = a.shell({ currentPath : __dirname, execPath : 'git config --global user.name', sync : 1 }).output.trim();
+
+  /* - */
+
+  begin();
+  a.ready.then( () =>
+  {
+    test.case = 'verbosity - 2, dry - 0';
+    return null;
+  });
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+
+  a.shell( 'git log -n 20' );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, '__sync__' ), 0 );
+    test.ge( _.strCount( op.output, `Author: ${ user }` ), 0 );
+    return null;
+  });
+  a.appStart
+  (
+    `.migrate dst:./!master src:../repo!master srcState1:#${ srcState1 } srcState2:#${ srcState2 } onMessage:${ a.abs( '../OnMessage.js' ) } v:2 dry:0`
+  );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, 'List of commits to migrate :' ), 1 );
+    test.identical( _.strCount( op.output, 'author' ), 18 );
+    test.identical( _.strCount( op.output, 'email' ), 18 );
+    test.identical( _.strCount( op.output, 'hash' ), 18 );
+    test.identical( _.strCount( op.output, 'message' ), 18 );
+    test.identical( _.strCount( op.output, 'date' ), 18 );
+    test.identical( _.strCount( op.output, 'commiterDate' ), 18 );
+    return null;
+  });
+  a.shell( 'git log -n 20' );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, '__sync__' ), 15 );
+    test.ge( _.strCount( op.output, `Author: ${ user }` ), 15 );
+    return null;
+  });
+
+  /* */
+
+  begin();
+  a.ready.then( () =>
+  {
+    test.case = 'verbosity - 2, dry - 1';
+    return null;
+  });
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+
+  a.shell( 'git log -n 20' );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, '__sync__' ), 0 );
+    test.ge( _.strCount( op.output, `Author: ${ user }` ), 0 );
+    return null;
+  });
+  a.appStart
+  (
+    `.migrate dst:./!master src:../repo!master srcState1:#${ srcState1 } srcState2:#${ srcState2 } onMessage:${ a.abs( '../OnMessage.js' ) } v:2 dry:1`
+  );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, 'List of commits to migrate :' ), 1 );
+    test.identical( _.strCount( op.output, 'author' ), 18 );
+    test.identical( _.strCount( op.output, 'email' ), 18 );
+    test.identical( _.strCount( op.output, 'hash' ), 18 );
+    test.identical( _.strCount( op.output, 'message' ), 18 );
+    test.identical( _.strCount( op.output, 'date' ), 18 );
+    test.identical( _.strCount( op.output, 'commiterDate' ), 18 );
+    return null;
+  });
+  a.shell( 'git log -n 20' );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, '__sync__' ), 0 );
+    test.ge( _.strCount( op.output, `Author: ${ user }` ), 0 );
+    return null;
+  });
+
+  /* */
+
+  begin();
+  a.ready.then( () =>
+  {
+    test.case = 'verbosity - 0, dry - 1';
+    return null;
+  });
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+
+  a.shell( 'git log -n 20' );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, '__sync__' ), 0 );
+    test.ge( _.strCount( op.output, `Author: ${ user }` ), 0 );
+    return null;
+  });
+  a.appStart
+  (
+    `.migrate dst:./!master src:../repo!master srcState1:#${ srcState1 } srcState2:#${ srcState2 } onMessage:${ a.abs( '../OnMessage.js' ) } v:0 dry:1`
+  );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, 'List of commits to migrate :' ), 1 );
+    test.identical( _.strCount( op.output, 'author' ), 18 );
+    test.identical( _.strCount( op.output, 'email' ), 18 );
+    test.identical( _.strCount( op.output, 'hash' ), 18 );
+    test.identical( _.strCount( op.output, 'message' ), 18 );
+    test.identical( _.strCount( op.output, 'date' ), 18 );
+    test.identical( _.strCount( op.output, 'commiterDate' ), 18 );
+    return null;
+  });
+  a.shell( 'git log -n 20' );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, '__sync__' ), 0 );
+    test.ge( _.strCount( op.output, `Author: ${ user }` ), 0 );
+    return null;
+  });
+
+  /* - */
+
+  return a.ready;
+
+  /* */
+
+  function begin()
+  {
+    let code =
+`
+  function onMessage( msg )
+  {
+    return '__sync__';
+  }
+  module.exports = onMessage;
+`;
+    a.ready.then( () => { a.fileProvider.filesDelete( a.abs( '../OnMessage.js' ) ); return null });
+    a.ready.then( () => { a.fileProvider.fileWrite( a.abs( '../OnMessage.js' ), code ); return null });
+    a.ready.then( () => { a.fileProvider.filesDelete( a.abs( '.' ) ); return null });
+    a.ready.then( () => { a.fileProvider.filesDelete( a.abs( '../repo' ) ); return null });
+    a.ready.then( () => { a.fileProvider.dirMake( a.abs( '.' ) ); return null });
+    a.shell( `git clone ${ dstRepositoryRemote } ./` );
+    a.shell( `git reset --hard ${ dstCommit }` );
+    return a.shell( `git clone ${ srcRepositoryRemote } ../repo` );
+  }
+}
+
+//
+
 function commitsDates( test )
 {
   const a = test.assetFor( false );
@@ -3258,8 +3715,6 @@ function commitsDatesWithOptionDelta( test )
   }
 }
 
-commitsDatesWithOptionDelta.timeOut = 120000;
-
 //
 
 function commitsDatesWithOptionDeltaAsString( test )
@@ -3636,11 +4091,11 @@ function commitsDatesWithOptionDeviation( test )
     test.identical( op[ 0 ].author, originalHistory[ 0 ].author );
 
     test.ge( Date.parse( op[ 11 ].date ) - Date.parse( op[ 12 ].date ), 2500000 );
-    test.le( Date.parse( op[ 11 ].date ) - Date.parse( op[ 12 ].date ), 4500000 );
+    test.le( Date.parse( op[ 11 ].date ) - Date.parse( op[ 12 ].date ), 4700000 );
     test.ge( Date.parse( op[ 10 ].date ) - Date.parse( op[ 11 ].date ), 2500000 );
-    test.le( Date.parse( op[ 10 ].date ) - Date.parse( op[ 11 ].date ), 4500000 );
+    test.le( Date.parse( op[ 10 ].date ) - Date.parse( op[ 11 ].date ), 4700000 );
     test.ge( Date.parse( op[ 0 ].date ) - Date.parse( op[ 1 ].date ), 2500000 );
-    test.le( Date.parse( op[ 0 ].date ) - Date.parse( op[ 1 ].date ), 4500000 );
+    test.le( Date.parse( op[ 0 ].date ) - Date.parse( op[ 1 ].date ), 4700000 );
     return null;
   });
 
@@ -3659,8 +4114,6 @@ function commitsDatesWithOptionDeviation( test )
   }
 }
 
-commitsDatesWithOptionDeviation.timeOut = 120000;
-
 // --
 // declare
 // --
@@ -3673,7 +4126,7 @@ const Proto =
 
   onSuiteBegin,
   onSuiteEnd,
-  routineTimeOut : 60000,
+  routineTimeOut : 120000,
 
   context :
   {
@@ -3691,6 +4144,8 @@ const Proto =
     agreeWithOptionOnly,
     agreeWithOptionSrcDirPath,
     agreeWithOptionDstDirPath,
+    agreeWithOptionVerbosity,
+    agreeWithOptionDry,
 
     migrate,
     migrateWithOptionOnMessage,
@@ -3699,6 +4154,8 @@ const Proto =
     migrateWithOptionOnly,
     migrateWithOptionSrcDirPath,
     migrateWithOptionDstDirPath,
+    migrateWithOptionVerbosity,
+    migrateWithOptionDry,
 
     commitsDates,
     commitsDatesWithOptionDelta,

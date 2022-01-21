@@ -159,6 +159,10 @@ commandAgree.defaults =
 };
 command.hint = 'Synchronize repository with another repository / directory.';
 command.subjectHint = false;
+command.propertiesAliases =
+{
+  verbosity : [ 'v' ]
+};
 command.properties =
 {
   src : 'A path to source repository. Should contains a branch / tag / version to agree with.',
@@ -169,6 +173,8 @@ command.properties =
   mergeStrategy : 'A strategy to resolve conflicts in merged files. \n\tStrategies : \n\t`src` - apply external repository changes, \n\t`dst` - save original repository changes, \n\t`manual` - resolve conflicts manually. \n\tDefault is `src`.',
   but : 'A pattern or array of patterns to exclude from merge. Could be a glob.',
   only : 'A pattern or array of patterns to include in merge. Could be a glob.',
+  verbosity : 'Set verbosity. Default is 1.',
+  dry : 'Dry run without changes in repository. Default is 0. If `dry` is 1, then command will print list of files to change.',
 };
 
 //
@@ -194,6 +200,10 @@ commandMigrate.defaults =
 };
 command.hint = 'Migrate commits from one repository to another repository.';
 command.subjectHint = false;
+command.propertiesAliases =
+{
+  verbosity : [ 'v' ]
+};
 command.properties =
 {
   src : 'A path to source repository. Can contain branch name.',
@@ -210,6 +220,8 @@ command.properties =
   delta : 'An option that define time delta that will be added to commit offset time. Accepts number in miliseconds and format "hh:mm:ss".',
   periodic : 'If option is defined, the commits will be written with defined period, start date is a sum of relative time and delta. Accepts number in miliseconds and format "hh:mm:ss".',
   deviation : 'Option works with option `periodic`, defines deviation of commit date. Commits will be written with random date in defined date range. Accepts number in miliseconds and format "hh:mm:ss".',
+  verbosity : 'Set verbosity. Default is 1.',
+  dry : 'Dry run without changes in repository. Default is 0. If `dry` is 1, then command will print list of files to change.',
 };
 
 //

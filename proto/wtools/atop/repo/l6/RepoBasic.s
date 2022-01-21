@@ -94,7 +94,8 @@ function repositoryAgree( o )
       mergeStrategy : o.mergeStrategy,
       but : o.but,
       only : o.only,
-      logger : 2,
+      logger : o.dry ? 2 : o.verbosity,
+      dry : o.dry,
     });
   });
   return ready.finally( ( err, arg ) =>
@@ -115,6 +116,8 @@ repositoryAgree.defaults =
   mergeStrategy : null,
   but : null,
   only : null,
+  verbosity : 1,
+  dry : 0,
 };
 
 //
@@ -142,7 +145,7 @@ function repositoryMigrate( o )
     && srcParsed.tag === 'master'
     && !_.str.has( o.src, _.git.path.tagToken )
   )
-  srcParsed.tag = _.git.tagLocalRetrive({ localPath : o.src });
+  srcParsed.tag = _.git.tagLocalRetrive({ localPath : _.git.path.nativize( o.src ) });
 
   let onCommitMessage = o.onMessage;
   if( onCommitMessage )
@@ -176,6 +179,8 @@ function repositoryMigrate( o )
       onDate,
       but : o.but,
       only : o.only,
+      logger : o.dry ? 2 : o.verbosity,
+      dry : o.dry,
     });
   });
   return ready.finally( ( err, arg ) =>
@@ -203,6 +208,9 @@ repositoryMigrate.defaults =
   delta : 0,
   periodic : 0,
   deviation : 0,
+
+  verbosity : 1,
+  dry : 0,
 };
 
 //
