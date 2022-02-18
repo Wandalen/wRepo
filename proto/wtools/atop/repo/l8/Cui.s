@@ -173,6 +173,8 @@ command.properties =
   mergeStrategy : 'A strategy to resolve conflicts in merged files. \n\tStrategies : \n\t`src` - apply external repository changes, \n\t`dst` - save original repository changes, \n\t`manual` - resolve conflicts manually. \n\tDefault is `src`.',
   but : 'A pattern or array of patterns to exclude from merge. Could be a glob.',
   only : 'A pattern or array of patterns to include in merge. Could be a glob.',
+  relative : 'An option that define what date is used to apply delta. Option accepts values `now` and `commit`.\n\t`now` - time delta applies to current date.\n\t`commit` - time delta applies to commit author date.\n\tDefault is `commit`.',
+  delta : 'An option that define time delta that will be added to commit offset time. Accepts number in miliseconds and format "hh:mm:ss".',
   verbosity : 'Set verbosity. Default is 1.',
   dry : 'Dry run without changes in repository. Default is 0. If `dry` is 1, then command will print list of files to change.',
 };
@@ -216,7 +218,7 @@ command.properties =
   only : 'A pattern or array of patterns to include in merge. Could be a glob.',
   onMessage : 'A path to script that produce commit message. An original commit message will be passed to script. By default, command does not change commit message.',
   onDate : 'An option for modifying commit dates. Accepts values : `construct` and path to script.\n\t`construct` - callback will be constructed from options `relative`, `delta`, `periodic` and `deviation`. \n\tOtherwise, utility uses script in option. An original string date will be passed to script.\n\tBy default, command does not change commit date.',
-  relative : 'An option that define what date is used to apply delta. Option accepts values `now` and `commit`.\n\t`now` - time delta applies to current date.\n\t`commit` - time delta applies to commit author date.\n\tDefault is `now`.',
+  relative : 'An option that define what date is used to apply delta. Option accepts values `now` and `commit`.\n\t`now` - time delta applies to current date.\n\t`commit` - time delta applies to commit author date.\n\tDefault is `commit`.',
   delta : 'An option that define time delta that will be added to commit offset time. Accepts number in miliseconds and format "hh:mm:ss".',
   periodic : 'If option is defined, the commits will be written with defined period, start date is a sum of relative time and delta. Accepts number in miliseconds and format "hh:mm:ss".',
   deviation : 'Option works with option `periodic`, defines deviation of commit date. Commits will be written with random date in defined date range. Accepts number in miliseconds and format "hh:mm:ss".',
