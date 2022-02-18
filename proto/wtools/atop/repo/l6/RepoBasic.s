@@ -92,6 +92,8 @@ function repositoryAgree( o )
       dstDirPath : o.dstDirPath,
       commitMessage : o.message,
       mergeStrategy : o.mergeStrategy,
+      relative : o.relative,
+      delta : o.delta,
       but : o.but,
       only : o.only,
       logger : o.dry ? 2 : o.verbosity,
@@ -116,6 +118,8 @@ repositoryAgree.defaults =
   mergeStrategy : null,
   but : null,
   only : null,
+  relative : 'commit',
+  delta : null,
   verbosity : 1,
   dry : 0,
 };
@@ -204,7 +208,7 @@ repositoryMigrate.defaults =
   onMessage : null,
 
   onDate : 'construct',
-  relative : 'now',
+  relative : 'commit',
   delta : 0,
   periodic : 0,
   deviation : 0,

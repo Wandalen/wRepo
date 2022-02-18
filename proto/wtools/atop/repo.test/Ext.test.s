@@ -79,7 +79,7 @@ function agree( test )
     test.case = 'agree with local repository, use commit to agree with';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState }` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } relative:now` );
   a.ready.then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
@@ -133,7 +133,7 @@ function agree( test )
     test.case = 'agree with local repository, use commit to agree with';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:\`${ srcRepositoryRemote }#${ srcState }\`` );
+  a.appStart( `.agree dst:./!master src:\`${ srcRepositoryRemote }#${ srcState }\` relative:now` );
   a.ready.then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
@@ -318,7 +318,7 @@ function agreeWithOptionMessage( test )
     test.case = 'agree with local repository, use commit to agree with';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState } message:'Sync repositories'` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } message:'Sync repositories' relative:now` );
   a.ready.then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
@@ -373,7 +373,7 @@ function agreeWithOptionBut( test )
     test.case = 'no option but';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState }` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } relative:now` );
   a.ready.then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
@@ -403,7 +403,7 @@ function agreeWithOptionBut( test )
     test.case = 'but - string, matches file, exclude single file';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState } but:'package.json'` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } but:'package.json' relative:now` );
   a.ready.then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
@@ -434,7 +434,7 @@ function agreeWithOptionBut( test )
     test.case = 'but - string, no matching, exclude no file';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState } but:'unknown.json'` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } but:'unknown.json' relative:now` );
   a.ready.then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
@@ -464,7 +464,7 @@ function agreeWithOptionBut( test )
     test.case = 'but - string with glob, matches files, exclude two files';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState } but:'*package.json'` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } but:'*package.json' relative:now` );
   a.ready.then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
@@ -495,7 +495,10 @@ function agreeWithOptionBut( test )
     test.case = 'but - several strings in array, matches files, exclude two files';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState } but:'*package.json' but:'will.yml' but:'unknown.json'` );
+  a.appStart
+  (
+    `.agree dst:./!master src:../repo#${ srcState } but:'*package.json' but:'will.yml' but:'unknown.json' relative:now`
+  );
   a.ready.then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
@@ -525,7 +528,7 @@ function agreeWithOptionBut( test )
     test.case = 'but - several strings in array, matches files, exclude two files';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState } but:'[*package.json, will.yml, unknown.json]'` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } but:'[*package.json, will.yml, unknown.json]' relative:now` );
   a.ready.then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
@@ -584,7 +587,7 @@ function agreeWithOptionOnly( test )
     test.case = 'no option only';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState }` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } relative:now` );
   a.ready.then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
@@ -614,7 +617,7 @@ function agreeWithOptionOnly( test )
     test.case = 'only - string, matches file, include single file';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState } only:'package.json'` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } only:'package.json' relative:now` );
   a.ready.then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
@@ -644,7 +647,7 @@ function agreeWithOptionOnly( test )
     test.case = 'only - string, no matching, include no file';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState } only:'unknown.json'` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } only:'unknown.json' relative:now` );
   a.ready.then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
@@ -665,7 +668,7 @@ function agreeWithOptionOnly( test )
     test.case = 'only - string with glob, matches files, include two files';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState } only:'*package.json'` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } only:'*package.json' relative:now` );
   a.ready.then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
@@ -695,7 +698,10 @@ function agreeWithOptionOnly( test )
     test.case = 'only - several strings in array, matches files, exclude two files';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState } only:'*package.json' only:'will.yml' only:'unknown.json'` );
+  a.appStart
+  (
+    `.agree dst:./!master src:../repo#${ srcState } only:'*package.json' only:'will.yml' only:'unknown.json' relative:now`
+  );
   a.ready.then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
@@ -725,7 +731,7 @@ function agreeWithOptionOnly( test )
     test.case = 'only - several strings in array, matches files, exclude two files';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState } only:'[*package.json, will.yml, unknown.json]'` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } only:'[*package.json, will.yml, unknown.json]' relative:now` );
   a.ready.then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
@@ -785,7 +791,7 @@ function agreeWithOptionSrcDirPath( test )
     filesBefore = a.find( a.abs( './' ) );
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState } srcDirPath:'.' message:__sync__` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } srcDirPath:'.' message:__sync__ relative:now` );
   a.shell( 'git diff --name-only HEAD~..HEAD' );
   a.ready.then( ( op ) =>
   {
@@ -813,7 +819,7 @@ function agreeWithOptionSrcDirPath( test )
     filesBefore = a.find( a.abs( './' ) );
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState } srcDirPath:'./' message:__sync__` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } srcDirPath:'./' message:__sync__ relative:now` );
   a.shell( 'git diff --name-only HEAD~..HEAD' );
   a.ready.then( ( op ) =>
   {
@@ -841,7 +847,7 @@ function agreeWithOptionSrcDirPath( test )
     filesBefore = a.find( a.abs( './' ) );
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState } srcDirPath:'./proto' message:__sync__` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } srcDirPath:'./proto' message:__sync__ relative:now` );
   a.shell( 'git diff --name-only HEAD~..HEAD' );
   a.ready.then( ( op ) =>
   {
@@ -870,7 +876,7 @@ function agreeWithOptionSrcDirPath( test )
     filesBefore = a.find( a.abs( './' ) );
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState } srcDirPath:'.' only:'**/*.s' message:__sync__` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } srcDirPath:'.' only:'**/*.s' message:__sync__ relative:now` );
   a.shell( 'git diff --name-only HEAD~..HEAD' );
   a.ready.then( ( op ) =>
   {
@@ -892,7 +898,7 @@ function agreeWithOptionSrcDirPath( test )
     test.case = 'srcDirPath - current dir, dot and slash, with only';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState } srcDirPath:'./' only:'**/*.s' message:__sync__` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } srcDirPath:'./' only:'**/*.s' message:__sync__ relative:now` );
   a.shell( 'git diff --name-only HEAD~..HEAD' );
   a.ready.then( ( op ) =>
   {
@@ -914,7 +920,7 @@ function agreeWithOptionSrcDirPath( test )
     filesBefore = a.find( a.abs( './' ) );
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState } srcDirPath:'proto' only:'**/*.s' message:__sync__` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } srcDirPath:'proto' only:'**/*.s' message:__sync__ relative:now` );
   a.shell( 'git diff --name-only HEAD~..HEAD' );
   a.ready.then( ( op ) =>
   {
@@ -964,7 +970,7 @@ function agreeWithOptionDstDirPath( test )
     filesBefore = a.find( a.abs( './' ) );
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState } dstDirPath:'.' message:__sync__` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } dstDirPath:'.' message:__sync__ relative:now` );
   a.shell( 'git diff --name-only HEAD~..HEAD' );
   a.ready.then( ( op ) =>
   {
@@ -993,7 +999,7 @@ function agreeWithOptionDstDirPath( test )
     filesBefore = a.find( a.abs( './' ) );
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState } dstDirPath:'proto' message:__sync__` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } dstDirPath:'proto' message:__sync__ relative:now` );
   a.shell( 'git diff --name-only HEAD~..HEAD' );
   a.ready.then( ( op ) =>
   {
@@ -1015,7 +1021,7 @@ function agreeWithOptionDstDirPath( test )
     filesBefore = a.find( a.abs( './' ) );
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState } dstDirPath:'dev' message:__sync__` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } dstDirPath:'dev' message:__sync__ relative:now` );
   a.shell( 'git diff --name-only HEAD~..HEAD' );
   a.ready.then( ( op ) =>
   {
@@ -1037,7 +1043,10 @@ function agreeWithOptionDstDirPath( test )
     filesBefore = a.find( a.abs( './' ) );
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState } dstDirPath:'proto' srcDirPath:'proto' message:__sync__` );
+  a.appStart
+  (
+    `.agree dst:./!master src:../repo#${ srcState } dstDirPath:'proto' srcDirPath:'proto' message:__sync__ relative:now`
+  );
   a.shell( 'git diff --name-only HEAD~..HEAD' );
   a.ready.then( ( op ) =>
   {
@@ -1065,7 +1074,7 @@ function agreeWithOptionDstDirPath( test )
     filesBefore = a.find( a.abs( './' ) );
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState } dstDirPath:'proto' only:'proto/**' message:__sync__` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } dstDirPath:'proto' only:'proto/**' message:__sync__ relative:now` );
   a.shell( 'git diff --name-only HEAD~..HEAD' );
   a.ready.then( ( op ) =>
   {
@@ -1093,7 +1102,10 @@ function agreeWithOptionDstDirPath( test )
     filesBefore = a.find( a.abs( './' ) );
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState } dstDirPath:'dev' srcDirPath:'proto' message:__sync__` );
+  a.appStart
+  (
+    `.agree dst:./!master src:../repo#${ srcState } dstDirPath:'dev' srcDirPath:'proto' message:__sync__ relative:now`
+  );
   a.shell( 'git diff --name-only HEAD~..HEAD' );
   a.ready.then( ( op ) =>
   {
@@ -1121,7 +1133,7 @@ function agreeWithOptionDstDirPath( test )
     filesBefore = a.find( a.abs( './' ) );
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState } dstDirPath:'dev' only:'proto/**' message:__sync__` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } dstDirPath:'dev' only:'proto/**' message:__sync__ relative:now` );
   a.shell( 'git diff --name-only HEAD~..HEAD' );
   a.ready.then( ( op ) =>
   {
@@ -1357,6 +1369,191 @@ function agreeWithOptionDry( test )
 
 //
 
+function agreeWithOptionDelay( test )
+{
+  const a = test.assetFor( false );
+  const dstRepositoryRemote = 'https://github.com/Wandalen/wModuleForTesting1.git';
+  const dstCommit = '8e2aa80ca350f3c45215abafa07a4f2cd320342a';
+  const srcRepositoryRemote = 'https://github.com/Wandalen/wModuleForTesting2.git';
+  const srcState = 'HEAD~';
+
+  /* - */
+
+  let originalHead;
+  begin().then( () =>
+  {
+    test.case = 'relative - commit, delta - 0';
+    return null;
+  });
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } relative:commit delta:0` );
+  a.ready.then( () =>
+  {
+    return _.git.repositoryHistoryToJson
+    ({
+      localPath : a.abs( '.' ),
+      state1 : '#HEAD',
+      state2 : '#HEAD',
+    });
+    return null;
+  });
+  a.ready.then( ( commits ) =>
+  {
+    const head = commits[ 0 ];
+    originalHead = head;
+    test.identical( head.date, '2021-12-17 10:13:43 +0200' );
+    test.identical( head.date, head.commiterDate );
+    return null;
+  });
+
+  /* */
+
+  begin().then( () =>
+  {
+    test.case = 'relative - commit, delta - -1h';
+    return null;
+  });
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } relative:commit delta:'-01:00:00'` );
+  a.ready.then( () =>
+  {
+    return _.git.repositoryHistoryToJson
+    ({
+      localPath : a.abs( '.' ),
+      state1 : '#HEAD',
+      state2 : '#HEAD',
+    });
+    return null;
+  });
+  a.ready.then( ( commits ) =>
+  {
+    const head = commits[ 0 ];
+    test.identical( Date.parse( originalHead.date ) - Date.parse( head.date ), 3600000 );
+    test.identical( head.date, head.commiterDate );
+    return null;
+  });
+
+  /* */
+
+  begin().then( () =>
+  {
+    test.case = 'relative - commit, delta - -1h';
+    return null;
+  });
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } relative:commit delta:'01:00:00'` );
+  a.ready.then( () =>
+  {
+    return _.git.repositoryHistoryToJson
+    ({
+      localPath : a.abs( '.' ),
+      state1 : '#HEAD',
+      state2 : '#HEAD',
+    });
+    return null;
+  });
+  a.ready.then( ( commits ) =>
+  {
+    const head = commits[ 0 ];
+    test.identical( Date.parse( head.date ) - Date.parse( originalHead.date ), 3600000 );
+    test.identical( head.date, head.commiterDate );
+    return null;
+  });
+
+  /* - */
+
+  begin().then( () =>
+  {
+    test.case = 'relative - now, delta - 0';
+    return null;
+  });
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } relative:now delta:0` );
+  a.ready.then( () =>
+  {
+    return _.git.repositoryHistoryToJson
+    ({
+      localPath : a.abs( '.' ),
+      state1 : '#HEAD',
+      state2 : '#HEAD',
+    });
+    return null;
+  });
+  a.ready.then( ( commits ) =>
+  {
+    const head = commits[ 0 ];
+    test.ge( Date.parse( head.date ) + 20000, _.time.now() );
+    test.identical( head.date, head.commiterDate );
+    return null;
+  });
+
+  /* */
+
+  begin().then( () =>
+  {
+    test.case = 'relative - now, delta - -1h';
+    return null;
+  });
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } relative:now delta:'-01:00:00'` );
+  a.ready.then( () =>
+  {
+    return _.git.repositoryHistoryToJson
+    ({
+      localPath : a.abs( '.' ),
+      state1 : '#HEAD',
+      state2 : '#HEAD',
+    });
+    return null;
+  });
+  a.ready.then( ( commits ) =>
+  {
+    const head = commits[ 0 ];
+    test.ge( Date.parse( head.date ) + 20000, _.time.now() - 3600000 );
+    test.identical( head.date, head.commiterDate );
+    return null;
+  });
+
+  /* */
+
+  begin().then( () =>
+  {
+    test.case = 'relative - now, delta - 1h';
+    return null;
+  });
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } relative:now delta:'01:00:00'` );
+  a.ready.then( () =>
+  {
+    return _.git.repositoryHistoryToJson
+    ({
+      localPath : a.abs( '.' ),
+      state1 : '#HEAD',
+      state2 : '#HEAD',
+    });
+    return null;
+  });
+  a.ready.then( ( commits ) =>
+  {
+    const head = commits[ 0 ];
+    test.ge( Date.parse( head.date ) + 20000, _.time.now() + 3600000 );
+    test.identical( head.date, head.commiterDate );
+    return null;
+  });
+
+  /* - */
+
+  return a.ready;
+
+  /* */
+
+  function begin()
+  {
+    a.ready.then( () => { a.fileProvider.filesDelete( a.abs( '.' ) ); return null });
+    a.ready.then( () => { a.fileProvider.filesDelete( a.abs( '../repo' ) ); return null });
+    a.ready.then( () => { a.fileProvider.dirMake( a.abs( '.' ) ); return null });
+    a.shell( `git clone ${ dstRepositoryRemote } ./` );
+    a.shell( `git reset --hard ${ dstCommit }` );
+    return a.shell( `git clone ${ srcRepositoryRemote } ../repo` );
+  }
+}
+
+//
+
 function migrate( test )
 {
   const a = test.assetFor( false );
@@ -1365,6 +1562,8 @@ function migrate( test )
   const srcRepositoryRemote = 'https://github.com/Wandalen/wModuleForTesting2.git';
   const srcState1 = 'f68a59ec46b14b1f19b1e3e660e924b9f1f674dd';
   const srcState2 = 'd8c18d24c1d65fab1af6b8d676bba578b58bfad5';
+  const start = Date.parse( '2021-08-11 14:09:46 +0300' );
+  const delta = start - _.time.now() - 3600000;
 
   /* - */
 
@@ -1374,7 +1573,8 @@ function migrate( test )
     test.case = 'migrate with local repository, start commit';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 } delta:'1980:00:00'` );
+  a.appStart( `.commits.dates src:'.' state1:'#HEAD' relative:commit delta:${ delta }` );
 
   a.appStart( `.migrate dst:./!master src:../repo!master srcState1:#${ srcState1 }` );
   a.ready.then( ( op ) =>
@@ -1395,7 +1595,8 @@ function migrate( test )
     test.case = 'migrate with local repository, start and end commits';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 } delta:'1980:00:00'` );
+  a.appStart( `.commits.dates src:'.' state1:'#HEAD' relative:commit delta:${ delta }` );
 
   a.appStart( `.migrate dst:./!master src:../repo!master srcState1:#${ srcState1 } srcState2:#${ srcState2 }` );
   a.ready.then( ( op ) =>
@@ -1418,7 +1619,8 @@ function migrate( test )
     test.case = 'migrate with remote repository, start commit';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 } delta:'1980:00:00'` );
+  a.appStart( `.commits.dates src:'.' state1:'#HEAD' relative:commit delta:${ delta }` );
 
   a.appStart( `.migrate dst:./!master src:'${ srcRepositoryRemote }!master' srcState1:#${ srcState1 }` );
   a.ready.then( ( op ) =>
@@ -1439,7 +1641,8 @@ function migrate( test )
     test.case = 'migrate with local repository, start and end commits';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 } delta:'1980:00:00'` );
+  a.appStart( `.commits.dates src:'.' state1:'#HEAD' relative:commit delta:${ delta }` );
 
   a.appStart
   (
@@ -1484,6 +1687,8 @@ function migrateWithOptionOnMessage( test )
   const srcRepositoryRemote = 'https://github.com/Wandalen/wModuleForTesting2.git';
   const srcState1 = 'f68a59ec46b14b1f19b1e3e660e924b9f1f674dd';
   const srcState2 = 'd8c18d24c1d65fab1af6b8d676bba578b58bfad5';
+  const start = Date.parse( '2021-08-11 14:09:46 +0300' );
+  const delta = start - _.time.now() - 3600000;
 
   /* - */
 
@@ -1493,7 +1698,8 @@ function migrateWithOptionOnMessage( test )
     test.case = 'no option onMessage';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 } delta:'1980:00:00'` );
+  a.appStart( `.commits.dates src:'.' state1:'#HEAD' relative:commit delta:${ delta }` );
 
   a.appStart( `.migrate dst:./!master src:../repo!master srcState1:#${ srcState1 } srcState2:#${ srcState2 }` );
   a.ready.then( ( op ) =>
@@ -1523,7 +1729,8 @@ function migrateWithOptionOnMessage( test )
     test.case = 'absolute path, onMessage returns static message, should write each commit with message';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 } delta:'1980:00:00'` );
+  a.appStart( `.commits.dates src:'.' state1:'#HEAD' relative:commit delta:${ delta }` );
 
   a.appStart( `.migrate dst:./!master src:../repo!master srcState1:#${ srcState1 } srcState2:#${ srcState2 } onMessage:${ a.abs( '../OnMessage.js' ) }` );
   a.ready.then( ( op ) =>
@@ -1553,7 +1760,8 @@ function migrateWithOptionOnMessage( test )
     test.case = 'relative path, onMessage returns static message, should write each commit with message';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 } delta:'1980:00:00'` );
+  a.appStart( `.commits.dates src:'.' state1:'#HEAD' relative:commit delta:${ delta }` );
 
   a.appStart( `.migrate dst:./!master src:../repo!master srcState1:#${ srcState1 } srcState2:#${ srcState2 } onMessage:${ '../OnMessage.js' }` );
   a.ready.then( ( op ) =>
@@ -1627,7 +1835,7 @@ function migrateWithOptionOnDateAsMap( test )
     test.case = 'delta - one hour, relative - commit';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 } delta:'1980:00:00'` );
   a.appStart( `.commits.dates src:'.' state1:'#HEAD' relative:commit delta:${ delta }` );
 
   a.appStart
@@ -1667,7 +1875,7 @@ function migrateWithOptionOnDateAsMap( test )
     test.case = 'delta - one hour, relative - now';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 } delta:'1980:00:00'` );
   a.appStart( `.commits.dates src:'.' state1:'#HEAD' relative:commit delta:${ delta }` );
 
   a.appStart
@@ -1709,7 +1917,7 @@ function migrateWithOptionOnDateAsMap( test )
     test.case = 'delta - negative, one hour, relative - commit';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 } delta:'1980:00:00'` );
   a.appStart( `.commits.dates src:'.' state1:'#HEAD' relative:commit delta:${ delta - 3600000 }` );
 
   a.appStart
@@ -1749,7 +1957,7 @@ function migrateWithOptionOnDateAsMap( test )
     test.case = 'delta - negative, one hour, relative - now';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 } delta:'1980:00:00'` );
   a.appStart( `.commits.dates src:'.' state1:'#HEAD' relative:commit delta:${ delta }` );
 
   a.appStart
@@ -1791,7 +1999,7 @@ function migrateWithOptionOnDateAsMap( test )
     test.case = 'delta - one hour, relative - commit, periodic - one hour';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 } delta:'1980:00:00'` );
   a.appStart( `.commits.dates src:'.' state1:'#HEAD' relative:commit delta:${ delta }` );
 
   a.appStart
@@ -1833,7 +2041,7 @@ function migrateWithOptionOnDateAsMap( test )
     test.case = 'delta - one hour, relative - commit, periodic - one hour, deviation - ten minutes';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 } delta:'1980:00:00'` );
   a.appStart( `.commits.dates src:'.' state1:'#HEAD' relative:commit delta:${ delta }` );
 
   a.appStart
@@ -1878,7 +2086,7 @@ function migrateWithOptionOnDateAsMap( test )
     test.case = 'delta - one hour, relative - fromFirst, periodic - one hour, deviation - ten minutes';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 } delta:'1980:00:00'` );
   a.appStart( `.commits.dates src:'.' state1:'#HEAD' relative:commit delta:${ delta }` );
 
   a.appStart
@@ -1970,6 +2178,8 @@ function migrateWithOptionBut( test )
   const srcRepositoryRemote = 'https://github.com/Wandalen/wModuleForTesting2.git';
   const srcState1 = 'f68a59ec46b14b1f19b1e3e660e924b9f1f674dd';
   const srcState2 = 'd8c18d24c1d65fab1af6b8d676bba578b58bfad5';
+  const start = Date.parse( '2021-08-11 14:09:46 +0300' );
+  const delta = start - _.time.now() - 3600000;
 
   /* - */
 
@@ -1979,7 +2189,8 @@ function migrateWithOptionBut( test )
     test.case = 'no option but';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 } delta:'1980:00:00'` );
+  a.appStart( `.commits.dates src:'.' state1:'#HEAD' relative:commit delta:${ delta }` );
 
   a.appStart( `.migrate dst:./!master src:../repo!master srcState1:#${ srcState1 } srcState2:#${ srcState2 } onMessage:${ a.abs( '../OnMessage.js' ) }` );
   a.ready.then( ( op ) =>
@@ -2009,7 +2220,8 @@ function migrateWithOptionBut( test )
     test.case = 'but - string, matches file, exclude single file';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 } delta:'1980:00:00'` );
+  a.appStart( `.commits.dates src:'.' state1:'#HEAD' relative:commit delta:${ delta }` );
 
   a.appStart( `.migrate dst:./!master src:../repo!master srcState1:#${ srcState1 } srcState2:#${ srcState2 } onMessage:${ '../OnMessage.js' } but:'package.json'` );
   a.ready.then( ( op ) =>
@@ -2039,7 +2251,8 @@ function migrateWithOptionBut( test )
     test.case = 'but - string, matches no file, exclude no file';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 } delta:'1980:00:00'` );
+  a.appStart( `.commits.dates src:'.' state1:'#HEAD' relative:commit delta:${ delta }` );
 
   a.appStart( `.migrate dst:./!master src:../repo!master srcState1:#${ srcState1 } srcState2:#${ srcState2 } onMessage:${ '../OnMessage.js' } but:'unknown.json'` );
   a.ready.then( ( op ) =>
@@ -2069,7 +2282,8 @@ function migrateWithOptionBut( test )
     test.case = 'but - string with glob, matches file, exclude two files';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 } delta:'1980:00:00'` );
+  a.appStart( `.commits.dates src:'.' state1:'#HEAD' relative:commit delta:${ delta }` );
 
   a.appStart( `.migrate dst:./!master src:../repo!master srcState1:#${ srcState1 } srcState2:#${ srcState2 } onMessage:${ '../OnMessage.js' } but:'*package.json'` );
   a.ready.then( ( op ) =>
@@ -2099,7 +2313,8 @@ function migrateWithOptionBut( test )
     test.case = 'but - array of strings, matches files';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 } delta:'1980:00:00'` );
+  a.appStart( `.commits.dates src:'.' state1:'#HEAD' relative:commit delta:${ delta }` );
 
   a.appStart( `.migrate dst:./!master src:../repo!master srcState1:#${ srcState1 } srcState2:#${ srcState2 } onMessage:${ '../OnMessage.js' } but:'*package.json' but:'will.yml' but:'unknown.json'` );
   a.ready.then( ( op ) =>
@@ -2129,7 +2344,8 @@ function migrateWithOptionBut( test )
     test.case = 'but - array of strings, matches files';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 } delta:'1980:00:00'` );
+  a.appStart( `.commits.dates src:'.' state1:'#HEAD' relative:commit delta:${ delta }` );
 
   a.appStart( `.migrate dst:./!master src:../repo!master srcState1:#${ srcState1 } srcState2:#${ srcState2 } onMessage:${ '../OnMessage.js' } but:[*package.json, will.yml, unknown.json]` );
   a.ready.then( ( op ) =>
@@ -2190,6 +2406,8 @@ function migrateWithOptionOnly( test )
   const srcRepositoryRemote = 'https://github.com/Wandalen/wModuleForTesting2.git';
   const srcState1 = 'f68a59ec46b14b1f19b1e3e660e924b9f1f674dd';
   const srcState2 = 'd8c18d24c1d65fab1af6b8d676bba578b58bfad5';
+  const start = Date.parse( '2021-08-11 14:09:46 +0300' );
+  const delta = start - _.time.now() - 3600000;
 
   /* - */
 
@@ -2199,7 +2417,8 @@ function migrateWithOptionOnly( test )
     test.case = 'no option only';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 } delta:'1980:00:00'` );
+  a.appStart( `.commits.dates src:'.' state1:'#HEAD' relative:commit delta:${ delta }` );
 
   a.appStart( `.migrate dst:./!master src:../repo!master srcState1:#${ srcState1 } srcState2:#${ srcState2 } onMessage:${ a.abs( '../OnMessage.js' ) }` );
   a.ready.then( ( op ) =>
@@ -2229,7 +2448,8 @@ function migrateWithOptionOnly( test )
     test.case = 'only - string, matches file, include single file';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 } delta:'1980:00:00'` );
+  a.appStart( `.commits.dates src:'.' state1:'#HEAD' relative:commit delta:${ delta }` );
 
   a.appStart( `.migrate dst:./!master src:../repo!master srcState1:#${ srcState1 } srcState2:#${ srcState2 } onMessage:${ '../OnMessage.js' } only:'package.json'` );
   a.ready.then( ( op ) =>
@@ -2259,7 +2479,8 @@ function migrateWithOptionOnly( test )
     test.case = 'only - string, matches no file, include no file';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 } delta:'1980:00:00'` );
+  a.appStart( `.commits.dates src:'.' state1:'#HEAD' relative:commit delta:${ delta }` );
 
   a.appStart( `.migrate dst:./!master src:../repo!master srcState1:#${ srcState1 } srcState2:#${ srcState2 } onMessage:${ '../OnMessage.js' } only:'unknown.json'` );
   a.ready.then( ( op ) =>
@@ -2289,7 +2510,8 @@ function migrateWithOptionOnly( test )
     test.case = 'only - string with glob, matches file, include two files';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 } delta:'1980:00:00'` );
+  a.appStart( `.commits.dates src:'.' state1:'#HEAD' relative:commit delta:${ delta }` );
 
   a.appStart( `.migrate dst:./!master src:../repo!master srcState1:#${ srcState1 } srcState2:#${ srcState2 } onMessage:${ '../OnMessage.js' } only:'*package.json'` );
   a.ready.then( ( op ) =>
@@ -2319,7 +2541,8 @@ function migrateWithOptionOnly( test )
     test.case = 'only - array of strings, matches files';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 } delta:'1980:00:00'` );
+  a.appStart( `.commits.dates src:'.' state1:'#HEAD' relative:commit delta:${ delta }` );
 
   a.appStart( `.migrate dst:./!master src:../repo!master srcState1:#${ srcState1 } srcState2:#${ srcState2 } onMessage:${ '../OnMessage.js' } only:'*package.json' only:'will.yml' only:'unknown.json'` );
   a.ready.then( ( op ) =>
@@ -2349,7 +2572,8 @@ function migrateWithOptionOnly( test )
     test.case = 'only - array of strings, matches files';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 } delta:'1980:00:00'` );
+  a.appStart( `.commits.dates src:'.' state1:'#HEAD' relative:commit delta:${ delta }` );
 
   a.appStart( `.migrate dst:./!master src:../repo!master srcState1:#${ srcState1 } srcState2:#${ srcState2 } onMessage:${ '../OnMessage.js' } only:'[*package.json, will.yml, unknown.json]'` );
   a.ready.then( ( op ) =>
@@ -2411,6 +2635,8 @@ function migrateWithOptionSrcDirPath( test )
   const srcState1 = 'f68a59ec46b14b1f19b1e3e660e924b9f1f674dd';
   const srcState2 = 'd8c18d24c1d65fab1af6b8d676bba578b58bfad5';
   const user = a.shell({ currentPath : __dirname, execPath : 'git config --global user.name', sync : 1 }).output.trim();
+  const start = Date.parse( '2021-08-11 14:09:46 +0300' );
+  const delta = start - _.time.now() - 3600000;
 
   /* - */
 
@@ -2420,7 +2646,9 @@ function migrateWithOptionSrcDirPath( test )
     test.case = 'srcDirPath - current dir, dot, without only';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 } delta:'1980:00:00'` );
+  a.appStart( `.commits.dates src:'.' state1:'#HEAD' relative:commit delta:${ delta }` );
+
   a.ready.then( () =>
   {
     filesBefore = a.find( a.abs( './' ) );
@@ -2468,7 +2696,9 @@ function migrateWithOptionSrcDirPath( test )
     test.case = 'srcDirPath - current dir, dot and slash, without only';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 } delta:'1980:00:00'` );
+  a.appStart( `.commits.dates src:'.' state1:'#HEAD' relative:commit delta:${ delta }` );
+
   a.ready.then( () =>
   {
     filesBefore = a.find( a.abs( './' ) );
@@ -2516,7 +2746,9 @@ function migrateWithOptionSrcDirPath( test )
     test.case = 'srcDirPath - nested dir, without only';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 } delta:'1980:00:00'` );
+  a.appStart( `.commits.dates src:'.' state1:'#HEAD' relative:commit delta:${ delta }` );
+
   a.ready.then( () =>
   {
     filesBefore = a.find( a.abs( './' ) );
@@ -2564,7 +2796,9 @@ function migrateWithOptionSrcDirPath( test )
     test.case = 'srcDirPath - current dir, dot, with only';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 } delta:'1980:00:00'` );
+  a.appStart( `.commits.dates src:'.' state1:'#HEAD' relative:commit delta:${ delta }` );
+
   a.ready.then( () =>
   {
     filesBefore = a.find( a.abs( './' ) );
@@ -2612,7 +2846,9 @@ function migrateWithOptionSrcDirPath( test )
     test.case = 'srcDirPath - current dir, dot and slash, with only';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 } delta:'1980:00:00'` );
+  a.appStart( `.commits.dates src:'.' state1:'#HEAD' relative:commit delta:${ delta }` );
+
   a.ready.then( () =>
   {
     filesBefore = a.find( a.abs( './' ) );
@@ -2660,7 +2896,9 @@ function migrateWithOptionSrcDirPath( test )
     test.case = 'srcDirPath - nested dir, with only';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 } delta:'1980:00:00'` );
+  a.appStart( `.commits.dates src:'.' state1:'#HEAD' relative:commit delta:${ delta }` );
+
   a.ready.then( () =>
   {
     filesBefore = a.find( a.abs( './' ) );
@@ -2741,6 +2979,8 @@ function migrateWithOptionDstDirPath( test )
   const srcState1 = 'f68a59ec46b14b1f19b1e3e660e924b9f1f674dd';
   const srcState2 = 'd8c18d24c1d65fab1af6b8d676bba578b58bfad5';
   const user = a.shell({ currentPath : __dirname, execPath : 'git config --global user.name', sync : 1 }).output.trim();
+  const start = Date.parse( '2021-08-11 14:09:46 +0300' );
+  const delta = start - _.time.now() - 3600000;
 
   /* - */
 
@@ -2750,7 +2990,8 @@ function migrateWithOptionDstDirPath( test )
     test.case = 'dstDirPath - current dir';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 } delta:'1980:00:00'` );
+  a.appStart( `.commits.dates src:'.' state1:'#HEAD' relative:commit delta:${ delta }` );
   a.ready.then( () =>
   {
     filesBefore = a.find( a.abs( './' ) );
@@ -2798,7 +3039,8 @@ function migrateWithOptionDstDirPath( test )
     test.case = 'dstDirPath - nested dir, dir synchronized';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 } dstDirPath:proto` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 } dstDirPath:'proto' delta:'1980:00:00'` );
+  a.appStart( `.commits.dates src:'.' state1:'#HEAD' relative:commit delta:${ delta }` );
   a.ready.then( () =>
   {
     filesBefore = a.find( a.abs( './' ) );
@@ -2836,7 +3078,8 @@ function migrateWithOptionDstDirPath( test )
     test.case = 'dstDirPath - nested dir, srcDirPath, dir synchronized';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 } dstDirPath:proto` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 } srcDirPath:proto dstDirPath:proto delta:'1980:00:00'` );
+  a.appStart( `.commits.dates src:'.' state1:'#HEAD' relative:commit delta:${ delta }` );
   a.ready.then( () =>
   {
     filesBefore = a.find( a.abs( './' ) );
@@ -2852,7 +3095,7 @@ function migrateWithOptionDstDirPath( test )
   {
     test.identical( op.exitCode, 0 );
     var files = op.output.trim().split( '\n' );
-    test.identical( files.length, 19 );
+    test.identical( files.length, 3 );
 
     var filesAfter = a.find( a.abs( './' ) );
     test.identical( filesBefore, filesAfter );
@@ -2874,7 +3117,13 @@ function migrateWithOptionDstDirPath( test )
     test.case = 'dstDirPath - nested dir, srcDirPath, dir synchronized';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 } dstDirPath:proto` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 } dstDirPath:'proto' delta:'1980:00:00'` );
+  a.appStart( `.commits.dates src:'.' state1:'#HEAD' relative:commit delta:${ delta }` );
+  a.ready.then( () =>
+  {
+    filesBefore = a.find( a.abs( './' ) );
+    return null;
+  });
   a.appStart
   (
     `.migrate dst:./!master src:../repo!master srcState1:#${ srcState1 } srcState2:#${ srcState2 } `
@@ -2939,6 +3188,8 @@ function migrateWithOptionVerbosity( test )
   const srcRepositoryRemote = 'https://github.com/Wandalen/wModuleForTesting2.git';
   const srcState1 = 'f68a59ec46b14b1f19b1e3e660e924b9f1f674dd';
   const srcState2 = 'd8c18d24c1d65fab1af6b8d676bba578b58bfad5';
+  const start = Date.parse( '2021-08-11 14:09:46 +0300' );
+  const delta = start - _.time.now() - 3600000;
 
   /* - */
 
@@ -2948,7 +3199,8 @@ function migrateWithOptionVerbosity( test )
     test.case = 'verbosity - 0, full option';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 } delta:'1980:00:00'` );
+  a.appStart( `.commits.dates src:'.' state1:'#HEAD' relative:commit delta:${ delta }` );
 
   a.appStart( `.migrate dst:./!master src:../repo!master srcState1:#${ srcState1 } srcState2:#${ srcState2 } verbosity:0` );
   a.ready.then( ( op ) =>
@@ -2972,7 +3224,8 @@ function migrateWithOptionVerbosity( test )
     test.case = 'verbosity - 1, short option';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 } delta:'1980:00:00'` );
+  a.appStart( `.commits.dates src:'.' state1:'#HEAD' relative:commit delta:${ delta }` );
 
   a.appStart( `.migrate dst:./!master src:../repo!master srcState1:#${ srcState1 } srcState2:#${ srcState2 } v:1` );
   a.ready.then( ( op ) =>
@@ -2996,7 +3249,8 @@ function migrateWithOptionVerbosity( test )
     test.case = 'verbosity - 2, short option';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 } delta:'1980:00:00'` );
+  a.appStart( `.commits.dates src:'.' state1:'#HEAD' relative:commit delta:${ delta }` );
 
   a.appStart( `.migrate dst:./!master src:../repo!master srcState1:#${ srcState1 } srcState2:#${ srcState2 } v:2` );
   a.ready.then( ( op ) =>
@@ -3040,6 +3294,8 @@ function migrateWithOptionDry( test )
   const srcState1 = 'f68a59ec46b14b1f19b1e3e660e924b9f1f674dd';
   const srcState2 = 'd8c18d24c1d65fab1af6b8d676bba578b58bfad5';
   const user = a.shell({ currentPath : __dirname, execPath : 'git config --global user.name', sync : 1 }).output.trim();
+  const start = Date.parse( '2021-08-11 14:09:46 +0300' );
+  const delta = start - _.time.now() - 3600000;
 
   /* - */
 
@@ -3049,7 +3305,8 @@ function migrateWithOptionDry( test )
     test.case = 'verbosity - 2, dry - 0';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 } delta:'1980:00:00'` );
+  a.appStart( `.commits.dates src:'.' state1:'#HEAD' relative:commit delta:${ delta }` );
 
   a.shell( 'git log -n 20' );
   a.ready.then( ( op ) =>
@@ -3092,7 +3349,8 @@ function migrateWithOptionDry( test )
     test.case = 'verbosity - 2, dry - 1';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 } delta:'1980:00:00'` );
+  a.appStart( `.commits.dates src:'.' state1:'#HEAD' relative:commit delta:${ delta }` );
 
   a.shell( 'git log -n 20' );
   a.ready.then( ( op ) =>
@@ -3135,7 +3393,8 @@ function migrateWithOptionDry( test )
     test.case = 'verbosity - 0, dry - 1';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 }` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 } delta:'1980:00:00'` );
+  a.appStart( `.commits.dates src:'.' state1:'#HEAD' relative:commit delta:${ delta }` );
 
   a.shell( 'git log -n 20' );
   a.ready.then( ( op ) =>
@@ -4146,6 +4405,7 @@ const Proto =
     agreeWithOptionDstDirPath,
     agreeWithOptionVerbosity,
     agreeWithOptionDry,
+    agreeWithOptionDelay,
 
     migrate,
     migrateWithOptionOnMessage,
