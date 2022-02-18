@@ -3,8 +3,8 @@ root:
   - wRepo.out
 consistency:
   ../will.yml: &ref_0
-    hash: 62e2b3b69c30ec32dc0c690e499649df
-    size: 6574
+    hash: 89794e104f9e04b97e99abfd6cba0f8f
+    size: 6576
 module:
   wRepo.out:
     about:
@@ -1481,5 +1481,5 @@ module:
           - 'build::npm'
     consistency:
       ../will.yml:
-        hash: 62e2b3b69c30ec32dc0c690e499649df
-        size: 6574
+        hash: 89794e104f9e04b97e99abfd6cba0f8f
+        size: 6576
