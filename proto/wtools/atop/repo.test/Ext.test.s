@@ -79,7 +79,7 @@ function agree( test )
     test.case = 'agree with local repository, use commit to agree with';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState }` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } relative:now` );
   a.ready.then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
@@ -133,7 +133,7 @@ function agree( test )
     test.case = 'agree with local repository, use commit to agree with';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:\`${ srcRepositoryRemote }#${ srcState }\`` );
+  a.appStart( `.agree dst:./!master src:\`${ srcRepositoryRemote }#${ srcState }\` relative:now` );
   a.ready.then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
@@ -318,7 +318,7 @@ function agreeWithOptionMessage( test )
     test.case = 'agree with local repository, use commit to agree with';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState } message:'Sync repositories'` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } message:'Sync repositories' relative:now` );
   a.ready.then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
@@ -373,7 +373,7 @@ function agreeWithOptionBut( test )
     test.case = 'no option but';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState }` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } relative:now` );
   a.ready.then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
@@ -403,7 +403,7 @@ function agreeWithOptionBut( test )
     test.case = 'but - string, matches file, exclude single file';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState } but:'package.json'` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } but:'package.json' relative:now` );
   a.ready.then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
@@ -434,7 +434,7 @@ function agreeWithOptionBut( test )
     test.case = 'but - string, no matching, exclude no file';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState } but:'unknown.json'` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } but:'unknown.json' relative:now` );
   a.ready.then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
@@ -464,7 +464,7 @@ function agreeWithOptionBut( test )
     test.case = 'but - string with glob, matches files, exclude two files';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState } but:'*package.json'` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } but:'*package.json' relative:now` );
   a.ready.then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
@@ -495,7 +495,7 @@ function agreeWithOptionBut( test )
     test.case = 'but - several strings in array, matches files, exclude two files';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState } but:'*package.json' but:'will.yml' but:'unknown.json'` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } but:'*package.json' but:'will.yml' but:'unknown.json' relative:now` );
   a.ready.then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
@@ -525,7 +525,7 @@ function agreeWithOptionBut( test )
     test.case = 'but - several strings in array, matches files, exclude two files';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState } but:'[*package.json, will.yml, unknown.json]'` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } but:'[*package.json, will.yml, unknown.json]' relative:now` );
   a.ready.then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
@@ -584,7 +584,7 @@ function agreeWithOptionOnly( test )
     test.case = 'no option only';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState }` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } relative:now` );
   a.ready.then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
@@ -614,7 +614,7 @@ function agreeWithOptionOnly( test )
     test.case = 'only - string, matches file, include single file';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState } only:'package.json'` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } only:'package.json' relative:now` );
   a.ready.then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
@@ -644,7 +644,7 @@ function agreeWithOptionOnly( test )
     test.case = 'only - string, no matching, include no file';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState } only:'unknown.json'` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } only:'unknown.json' relative:now` );
   a.ready.then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
@@ -665,7 +665,7 @@ function agreeWithOptionOnly( test )
     test.case = 'only - string with glob, matches files, include two files';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState } only:'*package.json'` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } only:'*package.json' relative:now` );
   a.ready.then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
@@ -695,7 +695,7 @@ function agreeWithOptionOnly( test )
     test.case = 'only - several strings in array, matches files, exclude two files';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState } only:'*package.json' only:'will.yml' only:'unknown.json'` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } only:'*package.json' only:'will.yml' only:'unknown.json' relative:now` );
   a.ready.then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
@@ -725,7 +725,7 @@ function agreeWithOptionOnly( test )
     test.case = 'only - several strings in array, matches files, exclude two files';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState } only:'[*package.json, will.yml, unknown.json]'` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } only:'[*package.json, will.yml, unknown.json]' relative:now` );
   a.ready.then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
@@ -785,7 +785,7 @@ function agreeWithOptionSrcDirPath( test )
     filesBefore = a.find( a.abs( './' ) );
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState } srcDirPath:'.' message:__sync__` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } srcDirPath:'.' message:__sync__ relative:now` );
   a.shell( 'git diff --name-only HEAD~..HEAD' );
   a.ready.then( ( op ) =>
   {
@@ -813,7 +813,7 @@ function agreeWithOptionSrcDirPath( test )
     filesBefore = a.find( a.abs( './' ) );
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState } srcDirPath:'./' message:__sync__` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } srcDirPath:'./' message:__sync__ relative:now` );
   a.shell( 'git diff --name-only HEAD~..HEAD' );
   a.ready.then( ( op ) =>
   {
@@ -841,7 +841,7 @@ function agreeWithOptionSrcDirPath( test )
     filesBefore = a.find( a.abs( './' ) );
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState } srcDirPath:'./proto' message:__sync__` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } srcDirPath:'./proto' message:__sync__ relative:now` );
   a.shell( 'git diff --name-only HEAD~..HEAD' );
   a.ready.then( ( op ) =>
   {
@@ -870,7 +870,7 @@ function agreeWithOptionSrcDirPath( test )
     filesBefore = a.find( a.abs( './' ) );
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState } srcDirPath:'.' only:'**/*.s' message:__sync__` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } srcDirPath:'.' only:'**/*.s' message:__sync__ relative:now` );
   a.shell( 'git diff --name-only HEAD~..HEAD' );
   a.ready.then( ( op ) =>
   {
@@ -892,7 +892,7 @@ function agreeWithOptionSrcDirPath( test )
     test.case = 'srcDirPath - current dir, dot and slash, with only';
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState } srcDirPath:'./' only:'**/*.s' message:__sync__` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } srcDirPath:'./' only:'**/*.s' message:__sync__ relative:now` );
   a.shell( 'git diff --name-only HEAD~..HEAD' );
   a.ready.then( ( op ) =>
   {
@@ -914,7 +914,7 @@ function agreeWithOptionSrcDirPath( test )
     filesBefore = a.find( a.abs( './' ) );
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState } srcDirPath:'proto' only:'**/*.s' message:__sync__` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } srcDirPath:'proto' only:'**/*.s' message:__sync__ relative:now` );
   a.shell( 'git diff --name-only HEAD~..HEAD' );
   a.ready.then( ( op ) =>
   {
@@ -964,7 +964,7 @@ function agreeWithOptionDstDirPath( test )
     filesBefore = a.find( a.abs( './' ) );
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState } dstDirPath:'.' message:__sync__` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } dstDirPath:'.' message:__sync__ relative:now` );
   a.shell( 'git diff --name-only HEAD~..HEAD' );
   a.ready.then( ( op ) =>
   {
@@ -993,7 +993,7 @@ function agreeWithOptionDstDirPath( test )
     filesBefore = a.find( a.abs( './' ) );
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState } dstDirPath:'proto' message:__sync__` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } dstDirPath:'proto' message:__sync__ relative:now` );
   a.shell( 'git diff --name-only HEAD~..HEAD' );
   a.ready.then( ( op ) =>
   {
@@ -1015,7 +1015,7 @@ function agreeWithOptionDstDirPath( test )
     filesBefore = a.find( a.abs( './' ) );
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState } dstDirPath:'dev' message:__sync__` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } dstDirPath:'dev' message:__sync__ relative:now` );
   a.shell( 'git diff --name-only HEAD~..HEAD' );
   a.ready.then( ( op ) =>
   {
@@ -1037,7 +1037,7 @@ function agreeWithOptionDstDirPath( test )
     filesBefore = a.find( a.abs( './' ) );
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState } dstDirPath:'proto' srcDirPath:'proto' message:__sync__` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } dstDirPath:'proto' srcDirPath:'proto' message:__sync__ relative:now` );
   a.shell( 'git diff --name-only HEAD~..HEAD' );
   a.ready.then( ( op ) =>
   {
@@ -1065,7 +1065,7 @@ function agreeWithOptionDstDirPath( test )
     filesBefore = a.find( a.abs( './' ) );
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState } dstDirPath:'proto' only:'proto/**' message:__sync__` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } dstDirPath:'proto' only:'proto/**' message:__sync__ relative:now` );
   a.shell( 'git diff --name-only HEAD~..HEAD' );
   a.ready.then( ( op ) =>
   {
@@ -1093,7 +1093,7 @@ function agreeWithOptionDstDirPath( test )
     filesBefore = a.find( a.abs( './' ) );
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState } dstDirPath:'dev' srcDirPath:'proto' message:__sync__` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } dstDirPath:'dev' srcDirPath:'proto' message:__sync__ relative:now` );
   a.shell( 'git diff --name-only HEAD~..HEAD' );
   a.ready.then( ( op ) =>
   {
@@ -1121,7 +1121,7 @@ function agreeWithOptionDstDirPath( test )
     filesBefore = a.find( a.abs( './' ) );
     return null;
   });
-  a.appStart( `.agree dst:./!master src:../repo#${ srcState } dstDirPath:'dev' only:'proto/**' message:__sync__` );
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState } dstDirPath:'dev' only:'proto/**' message:__sync__ relative:now` );
   a.shell( 'git diff --name-only HEAD~..HEAD' );
   a.ready.then( ( op ) =>
   {
