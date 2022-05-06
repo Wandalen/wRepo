@@ -174,7 +174,7 @@ command.properties =
   but : 'A pattern or array of patterns to exclude from merge. Could be a glob.',
   only : 'A pattern or array of patterns to include in merge. Could be a glob.',
   relative : 'An option that define what date is used to apply delta. Option accepts values `now` and `commit`.\n\t`now` - time delta applies to current date.\n\t`commit` - time delta applies to commit author date.\n\tDefault is `commit`.',
-  delta : 'An option that define time delta that will be added to commit offset time. Accepts number in miliseconds and format "hh:mm:ss".',
+  delta : 'An option that define time delta that will be added to commit offset time. Accepts time in the next formats:\n\t- number in miliseconds. Example: 60000;\n\t- format "hh:mm:ss". Example: 00:01:00;\n\t- combination of time units: `d` - days, `h` - hours, `m` - minutes, `s` - seconds. Example: 2d 1h 3m.',
   verbosity : 'Set verbosity. Default is 1.',
   dry : 'Dry run without changes in repository. Default is 0. If `dry` is 1, then command will print list of files to change.',
 };
@@ -219,9 +219,9 @@ command.properties =
   onMessage : 'A path to script that produce commit message. An original commit message will be passed to script. By default, command does not change commit message.',
   onDate : 'An option for modifying commit dates. Accepts values : `construct` and path to script.\n\t`construct` - callback will be constructed from options `relative`, `delta`, `periodic` and `deviation`. \n\tOtherwise, utility uses script in option. An original string date will be passed to script.\n\tBy default, command does not change commit date.',
   relative : 'An option that define what date is used to apply delta. Option accepts values `now` and `commit`.\n\t`now` - time delta applies to current date.\n\t`commit` - time delta applies to commit author date.\n\tDefault is `commit`.',
-  delta : 'An option that define time delta that will be added to commit offset time. Accepts number in miliseconds and format "hh:mm:ss".',
+  delta : 'An option that define time delta that will be added to commit offset time. Accepts time in the next formats:\n\t- number in miliseconds. Example: 60000;\n\t- format "hh:mm:ss". Example: 00:01:00;\n\t- combination of time units: `d` - days, `h` - hours, `m` - minutes, `s` - seconds. Example: 2d 1h 3m.',
   periodic : 'If option is defined, the commits will be written with defined period, start date is a sum of relative time and delta. Accepts number in miliseconds and format "hh:mm:ss".',
-  deviation : 'Option works with option `periodic`, defines deviation of commit date. Commits will be written with random date in defined date range. Accepts number in miliseconds and format "hh:mm:ss".',
+  deviation : 'Option works with option `periodic`, defines deviation of commit date. Commits will be written with random date in defined date range. Accepts time in the next formats:\n\t- number in miliseconds. Example: 60000;\n\t- format "hh:mm:ss". Example: 00:01:00;\n\t- combination of time units: `d` - days, `h` - hours, `m` - minutes, `s` - seconds. Example: 2d 1h 3m.',
   verbosity : 'Set verbosity. Default is 1.',
   dry : 'Dry run without changes in repository. Default is 0. If `dry` is 1, then command will print list of files to change.',
 };
@@ -249,9 +249,9 @@ command.properties =
   state1 : 'A start commit.',
   state2 : 'An end commit. Optional, by default command changes commits from start commit to last commit in branch.',
   relative : 'Define what date will be modified and applied to commit. Accepts two options : "now" - current date, "commit" - commit date. Default is "now".',
-  delta : 'Define the time delta that applied to modified date. Accepts time in milliseconds or in format "hh:mm:ss". \n\tIf option `periodic` is enabled, than the option is used to calculate start date to write commits periodically.',
+  delta : 'Define the time delta that applied to modified date. Accepts delta in the next formats:\n\t- number in miliseconds. Example: 60000;\n\t- format "hh:mm:ss". Example: 00:01:00;\n\t- combination of time units: `d` - days, `h` - hours, `m` - minutes, `s` - seconds. Example: 2d 1h 3m.\n\tIf option `periodic` is enabled, than the option is used to calculate start date to write commits periodically.',
   periodic : 'Define the time period in which commits will be committed. Accepts time in milliseconds or in format "hh:mm:ss".',
-  deviation : 'Define deviation for periodically created commits. Accepts time in milliseconds or in format "hh:mm:ss".',
+  deviation : 'Define deviation for periodically created commits. Accepts time in the next formats:\n\t- number in miliseconds. Example: 60000;\n\t- format "hh:mm:ss". Example: 00:01:00;\n\t- combination of time units: `d` - days, `h` - hours, `m` - minutes, `s` - seconds. Example: 2d 1h 3m.',
 };
 
 // --
