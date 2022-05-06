@@ -1,6 +1,6 @@
 {
   "name": "wrepo",
-  "version": "0.3.390",
+  "version": "0.3.391",
   "description": "Utility to work with remote git repositories.",
   "author": "Kostiantyn Wandalen <wandalen@obox.systems>",
   "contributors": [
