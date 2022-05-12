@@ -1,6 +1,6 @@
 {
   "name": "wrepo",
-  "version": "0.3.393",
+  "version": "0.3.394",
   "description": "Utility to work with remote git repositories.",
   "author": "Kostiantyn Wandalen <wandalen@obox.systems>",
   "contributors": [
@@ -34,15 +34,15 @@
     "repo": "proto/wtools/atop/repo/entry/ExecUnrestricted"
   },
   "dependencies": {
-    "wTools": "alpha",
-    "wrepobasic": "alpha",
-    "wprocess": "alpha",
-    "wgittools": "alpha",
-    "wCopyable": "alpha",
-    "wcommandsaggregator": "alpha"
+    "wTools": "latest",
+    "wrepobasic": "latest",
+    "wprocess": "latest",
+    "wgittools": "latest",
+    "wCopyable": "latest",
+    "wcommandsaggregator": "latest"
   },
   "devDependencies": {
-    "wTesting": "alpha",
+    "wTesting": "latest",
     "eslint": "7.32.0"
   },
   "keywords": [
