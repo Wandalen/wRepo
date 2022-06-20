@@ -1375,6 +1375,7 @@ function agreeWithOptionDelay( test )
   const dstRepositoryRemote = 'https://github.com/Wandalen/wModuleForTesting1.git';
   const dstCommit = '8e2aa80ca350f3c45215abafa07a4f2cd320342a';
   const srcRepositoryRemote = 'https://github.com/Wandalen/wModuleForTesting2.git';
+  const srcCommit = '5d6093de421426fc81d64143b132715a229845a9';
   const srcState = 'HEAD~';
 
   /* - */
@@ -1548,7 +1549,8 @@ function agreeWithOptionDelay( test )
     a.ready.then( () => { a.fileProvider.dirMake( a.abs( '.' ) ); return null });
     a.shell( `git clone ${ dstRepositoryRemote } ./` );
     a.shell( `git reset --hard ${ dstCommit }` );
-    return a.shell( `git clone ${ srcRepositoryRemote } ../repo` );
+    a.shell( `git clone ${ srcRepositoryRemote } ../repo` );
+    return a.shell({ currentPath : a.abs( '../repo' ), execPath : `git reset --hard ${ srcCommit }` });
   }
 }
 
