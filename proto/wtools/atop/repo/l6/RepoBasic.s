@@ -190,7 +190,36 @@ function repositoryMigrate( o )
   return ready.finally( ( err, arg ) =>
   {
     if( err )
-    throw _.error.brief( err );
+    {
+      let msg = '';
+      if( _.str.begins( err.originalMessage, 'Expects no diffs between' ) )
+      {
+        let options = '';
+        if( o.onDate === 'construct' )
+        {
+          options += `relative:${ o.relative } `;
+          options += `delta:'${ o.delta }' `;
+        }
+        else
+        {
+          options += `relative:commit `;
+          options += `delta:0 `;
+        }
+
+        const dstParsed = _.git.path.parse( o.dst );
+        dstParsed.longPath = _.git.path.detrail( dstParsed.longPath );
+        const dstPath = _.git.path.str( dstParsed );
+
+        const srcParsed = _.git.path.parse( o.src );
+        delete srcParsed.tag;
+        srcParsed.hash = _.str.removeBegin( o.srcState1, '#' );
+        const srcPath = _.git.path.str( srcParsed );
+
+        msg += `\n\nTo synchronize repository with the state ${ o.srcState1 }, run next command :`
+        + `\n  repo .agree dst:'${ _.git.path.nativize( dstPath ) }' src:'${ _.git.path.nativize( srcPath ) }' ${ options }`;
+      }
+      throw _.error.brief( err, msg );
+    }
     return arg;
   });
 }
