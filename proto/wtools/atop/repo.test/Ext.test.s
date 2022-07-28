@@ -50,6 +50,32 @@ function agree( test )
   begin();
   a.ready.then( () =>
   {
+    test.case = 'agree with local repository, define no branches and no hashes';
+    return null;
+  });
+  a.appStart( '.agree dst:./ src:../repo' );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    var config = a.fileProvider.fileReadUnknown( a.abs( 'package.json' ) );
+    test.identical( config.name, 'wmodulefortesting2' );
+    var config = a.fileProvider.fileReadUnknown( a.abs( 'was.package.json' ) );
+    test.identical( config.name, 'wmodulefortesting2' );
+    return null;
+  });
+  a.shell( 'git log -n 1' );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, /Merge branch \'master\' of .*(\/|\\)repo into master/ ), 1 );
+    return null;
+  });
+
+  /* */
+
+  begin();
+  a.ready.then( () =>
+  {
     test.case = 'agree with local repository, use master branch to agree with';
     return null;
   });
