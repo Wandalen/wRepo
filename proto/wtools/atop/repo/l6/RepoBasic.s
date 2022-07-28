@@ -79,7 +79,7 @@ function repositoryAgree( o )
     && srcParsed.tag === 'master'
     && !_.str.has( o.src, _.git.path.tagToken )
   )
-  srcParsed.tag = _.git.tagLocalRetrive({ localPath : o.src });
+  srcParsed.tag = _.git.tagLocalRetrive({ localPath : _.git.path.nativize( o.src ) });
 
   const ready = _.take( null ).then( () =>
   {
