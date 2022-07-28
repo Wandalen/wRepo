@@ -2126,6 +2126,46 @@ function migrateWithOptionOnDateAsMap( test )
     return null;
   });
 
+  /* */
+
+  begin().then( () =>
+  {
+    test.case = 'delta - one hour, relative - commit, timeRange - auto';
+    return null;
+  });
+  a.appStart( `.agree dst:./!master src:../repo#${ srcState1 } delta:'1980:00:00'` );
+  a.appStart( `.commits.dates src:'.' state1:'#HEAD' relative:commit delta:${ delta }` );
+
+  a.appStart
+  (
+    `.migrate dst:./!master src:../repo!master srcState1:#${ srcState1 } srcState2:#${ srcState2 } `
+    + `relative:commit delta:1h timeRange:auto`
+  );
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    return _.git.repositoryHistoryToJson
+    ({
+      localPath : a.abs( '.' ),
+      state1 : '#8e2aa80ca350f3c45215abafa07a4f2cd320342a',
+      state2 : '#HEAD',
+    });
+  });
+  a.ready.then( ( op ) =>
+  {
+    test.identical( op.length, 17 );
+    test.notIdentical( op, originalHistory );
+    test.notIdentical( op[ 10 ], originalHistory[ 12 ] );
+    test.identical( op[ 10 ].message, originalHistory[ 12 ].message );
+    test.notIdentical( op[ 0 ], originalHistory[ 0 ] );
+    test.identical( op[ 0 ].message, originalHistory[ 0 ].message );
+    let delta = ( _.time.now() - Date.parse( originalHistory[ 16 ].date ) - 3600000 ) / 15;
+    test.le( _.time.now() - Date.parse( op[ 0 ].date ), delta + 60000 );
+    for( let i = 0 ; i < op.length ; i++ )
+    test.identical( op[ i ].date, op[ i ].commiterDate );
+    return null;
+  });
+
   /* - */
 
   return a.ready;
