@@ -161,7 +161,25 @@ function repositoryMigrate( o )
     onDate = Object.create( null );
     onDate.relative = o.relative;
     onDate.delta = o.delta;
-    onDate.periodic = o.periodic;
+    if( o.timeRange )
+    {
+      _.sure( !o.periodic, 'Options `timeRange` and `periodic` cannot be used simultaneously.')
+      _.sure
+      (
+        o.timeRange === 'auto' || ( _.array.is( o.timeRange ) && o.timeRange.length === 2 ),
+        'Please, use valid format of option `timeRange`.'
+      );
+
+      if( _.array.is( o.timeRange ) )
+      _.array.filter( o.timeRange, o.timeRange, ( e ) => e === '_' ? null : e );
+      else
+      o.timeRange = [ null, null ];
+      onDate.timeRange = o.timeRange;
+    }
+    else
+    {
+      onDate.periodic = o.periodic;
+    }
     onDate.deviation = o.deviation;
   }
   else
@@ -211,6 +229,7 @@ repositoryMigrate.defaults =
   relative : 'commit',
   delta : 0,
   periodic : 0,
+  timeRange : null,
   deviation : 0,
 
   verbosity : 1,
